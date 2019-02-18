@@ -561,7 +561,7 @@ class DummyWriteAttribute(Attribute):
 
 def yannickMakeService(callback):
     ch5 = ( CharacteristicBase()
-              .withValueAttrib(callback("1963b7b233be11e9b210d663bd873d93"))
+              .withValueAttrib(callback)
               .withProperties(12) )
     sv3 = ( Service().withPrimaryUUID("8535886a33c011e9b210d663bd873d93")
               .withCharacteristics(ch5) )
