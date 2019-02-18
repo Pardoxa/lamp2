@@ -1,6 +1,7 @@
 import struct
 import binascii
 import uuid
+import callback
 
 
 CID_GATT = 0x04
@@ -543,51 +544,51 @@ class GattServer:
 #        def setValue(self,value):
 #
 
-#class DummyWriteAttribute(Attribute):
-#    def __init__(self, charUUID, value=None):
-#        Attribute.__init__(self, charUUID, value)
-#
-#    def setValue(self, value):
-#        print ("Wrote Attribute %X = %s" % (self.handle, binascii.b2a_hex(value).decode('ascii')) )
-#        print("value",end="\t")
-#        print(value)
-#        if(value.startswith('b\'§'))
-#        self.value = value
-#
-#    def isWriteable(self):
-#        return True
+class DummyWriteAttribute(Attribute):
+    def __init__(self, charUUID, value=None):
+        Attribute.__init__(self, charUUID, value)
+
+    def setValue(self, value):
+        print ("Wrote Attribute %X = %s" % (self.handle, binascii.b2a_hex(value).decode('ascii')) )
+        print("value",end="\t")
+        print(value)
+        #if(value.startswith('b\'§'))
+        self.value = value
+
+    def isWriteable(self):
+        return True
 
 
-#def yannickMakeService():
+def yannickMakeService(callback):
+    ch5 = ( CharacteristicBase()
+              .withValueAttrib(callback("1963b7b233be11e9b210d663bd873d93"))
+              .withProperties(12) )
+    sv3 = ( Service().withPrimaryUUID("8535886a33c011e9b210d663bd873d93")
+              .withCharacteristics(ch5) )
+
+    return [sv3]
+#
+#def makeTestServices():
+#    ch1 = ReadOnlyCharacteristic(uuid.AssignedNumbers.deviceName, b'unit2')
+#    ch2 = ReadOnlyCharacteristic(uuid.AssignedNumbers.appearance, b'\x80\x00')
+#    sv1 = ( Service().withPrimaryUUID(uuid.AssignedNumbers.genericAccess)
+#                     .withCharacteristics(ch1,ch2) )
+#
+#    ch3 = ( ReadOnlyCharacteristic(uuid.AssignedNumbers.serviceChanged, b'\x00\x00\x00\x00')
+#              .withProperties(32)
+#              .withDescriptor(DummyWriteAttribute(UUID_CHAR_CLIENT_CONFIG, b'\x00\x00')) )
+#    sv2 = ( Service().withPrimaryUUID(uuid.AssignedNumbers.genericAttribute)
+#                     .withCharacteristics(ch3) )
+#
+#    ch4 = ReadOnlyCharacteristic("fffffffffffffffffffffffffffffff2", b'dynamic value')
 #    ch5 = ( CharacteristicBase()
 #              .withValueAttrib(DummyWriteAttribute("1963b7b233be11e9b210d663bd873d93"))
 #              .withProperties(12) )
 #    sv3 = ( Service().withPrimaryUUID("8535886a33c011e9b210d663bd873d93")
 #              .withCharacteristics(ch5) )
 #
-#    return [sv3]
-
-def makeTestServices():
-    ch1 = ReadOnlyCharacteristic(uuid.AssignedNumbers.deviceName, b'chrubuntu')
-    ch2 = ReadOnlyCharacteristic(uuid.AssignedNumbers.appearance, b'\x80\x00')
-    sv1 = ( Service().withPrimaryUUID(uuid.AssignedNumbers.genericAccess)
-                     .withCharacteristics(ch1,ch2) )
-
-    ch3 = ( ReadOnlyCharacteristic(uuid.AssignedNumbers.serviceChanged, b'\x00\x00\x00\x00')
-              .withProperties(32)
-              .withDescriptor(DummyWriteAttribute(UUID_CHAR_CLIENT_CONFIG, b'\x00\x00')) )
-    sv2 = ( Service().withPrimaryUUID(uuid.AssignedNumbers.genericAttribute)
-                     .withCharacteristics(ch3) )
-
-    ch4 = ReadOnlyCharacteristic("fffffffffffffffffffffffffffffff2", b'dynamic value')
-    ch5 = ( CharacteristicBase()
-              .withValueAttrib(DummyWriteAttribute("1963b7b233be11e9b210d663bd873d93"))
-              .withProperties(12) )
-    sv3 = ( Service().withPrimaryUUID("8535886a33c011e9b210d663bd873d93")
-              .withCharacteristics(ch5) )
-
-    return [sv3] # [sv1, sv2, sv3]
-
+#    return [sv3] # [sv1, sv2, sv3]
+#
 class DummyThing:
     def expect(self, db):
         self.expected = db

@@ -6,7 +6,7 @@ import commands
 import events
 import gap
 import gatt
-
+import callback
 class Device(events.EventHandler):
     def __init__(self):
         self.commandMap = {}  # Maps opcode to command objects
@@ -78,7 +78,8 @@ class Device(events.EventHandler):
         self.scn.addItem(gap.GAP_NAME_INCOMPLETE, 'test2'.encode('ascii'))
         print ("adv=", binascii.b2a_hex(self.adv.data))
         print ("scn=", binascii.b2a_hex(self.scn.data))
-        self.gatt = gatt.GattServer().withServices(gatt.makeTestServices()) # ...
+        CALLBACK = callback.state()
+        self.gatt = gatt.GattServer().withServices(gatt.yannickMakeService(CALLBACK)) # ...
 
         self.startup_state = 0
         self.startup_next_state(None)
