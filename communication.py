@@ -75,7 +75,7 @@ class Device(events.EventHandler):
         self.adv.addItem(gap.GAP_FLAGS, [0x06])
         self.adv.addItem(gap.GAP_UUID_128BIT_INCOMPLETE, b'\xF0\xF0\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF') #
         self.scn = gap.AdvertisingData()
-        self.scn.addItem(gap.GAP_NAME_INCOMPLETE, 'test2'.encode('ascii'))
+        self.scn.addItem(gap.GAP_NAME_INCOMPLETE, 'ylampBluetooth'.encode('ascii'))
         print ("adv=", binascii.b2a_hex(self.adv.data))
         print ("scn=", binascii.b2a_hex(self.scn.data))
         CALLBACK = callback.state("1963b7b233be11e9b210d663bd873d93")

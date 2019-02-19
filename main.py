@@ -1,6 +1,8 @@
 from communication import Device
 import callback
 import time
+import _thread
+import lightshow
 
 if __name__ == '__main__':
     from hcisocket_linux import HCISocket
@@ -8,5 +10,10 @@ if __name__ == '__main__':
 
     status = dev.start()
     print(status.get_status())
-    time.sleep(5)
+    light = lightshow.test_show(status)
+    try:
+        _thread.start_new_thread(light.blink, (), )
+        # _thread.start_new_thread(dev.run, (), )
+    except:
+        print("ERROR")
     dev.run()
