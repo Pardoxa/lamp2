@@ -27,20 +27,25 @@ def getClientConnection(server_sock):
  print("accepted connection from ", client_info)
  return client_sock
 
-def manageConnection(socket):
+def manageConnection(socket, callback):
  try:
    while True:
      data = socket.recv(1024)
      if len(data) == 0: break
      print("received [%s]" % data)
      socket.send("Echo from Pi: [%s]\n" % data)
+     callback(data)
  except IOError:
    pass
 
-server=initServer()
-while  True:
- client=getClientConnection(server)
- manageConnection(client)
- client.close()
-server.close()
-print("terminating...")
+def main(callback):
+    server=initServer()
+    while  True:
+        client=getClientConnection(server)
+        manageConnection(client, callback)
+        client.close()
+    server.close()
+    print("terminating...")
+
+if __name__ == '__main__':
+    main()

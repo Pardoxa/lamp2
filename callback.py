@@ -1,10 +1,9 @@
 import time
-import uuid
-from Mygatt import Attribute
 
 
 
-class state(Attribute):
+
+class state():
     """docstring for state."""
     status = 1
     _timer = time.monotonic()
@@ -12,13 +11,6 @@ class state(Attribute):
     def __init__(self, charUUID, value=None):
         Attribute.__init__(self, charUUID, value)
 
-    def setValue(self, value):
-        print("WroteValue", end = "\t")
-        print(value)
-        self.value = value
-
-    def isWriteable(self):
-        return True
 
     def get(self):
         return self

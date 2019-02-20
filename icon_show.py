@@ -45,6 +45,7 @@ def icon_show(func_continue):
         while time.monotonic() - now < 10:
 
             if not func_continue():
+                unicorn.off()
                 return
             time.sleep(0.1)
     unicorn.off()
