@@ -72,8 +72,8 @@ class Device(events.EventHandler):
         assert (self.hciSocket is not None)
 
         self.adv = gap.AdvertisingData()
-        self.adv.addItem(gap.GAP_FLAGS, [0x06])
-        self.adv.addItem(gap.GAP_UUID_128BIT_INCOMPLETE, b'\xF0\xF0\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF') #
+        #self.adv.addItem(gap.GAP_FLAGS, [0x06])
+        #self.adv.addItem(gap.GAP_UUID_128BIT_INCOMPLETE, b'\xF0\xF0\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF') #
         self.scn = gap.AdvertisingData()
         self.scn.addItem(gap.GAP_NAME_INCOMPLETE, 'ylampBluetooth'.encode('ascii'))
         print ("adv=", binascii.b2a_hex(self.adv.data))

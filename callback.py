@@ -35,6 +35,8 @@ class state(Attribute):
         Attribute.__init__(self, charUUID, value)
 
     def setValue(self, value):
+        print("WroteValue", end = "\t")
+        print(value)
         self.value = value
 
     def isWriteable(self):
