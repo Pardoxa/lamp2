@@ -1,30 +1,8 @@
 import time
 import uuid
+from Mygatt import Attribute
 
 
-class Attribute:
-    def __init__(self, att_type, value=None):
-        self.handle = None
-        self.typeUUID = uuid.UUID(att_type)
-        self.value = value
-
-    def setHandle(self, hnd):
-        self.handle = hnd
-
-    def getValue(self):
-        return self.value
-
-    def isWriteable(self):
-        return False
-
-    def setValue(self, value):
-        raise CommandError(E_WRITE_NOT_PERMITTED, "Write not permitted", self.handle)
-
-    def __str__(self):
-        v = self.getValue()
-        valstr = "<unset>" if (v is None) else binascii.b2a_hex(v).decode("ascii")
-        return ("Attr hnd=0x%04X UUID=%s val=%s" % (self.handle, self.typeUUID.getCommonName(),
-                   valstr ) )
 
 class state(Attribute):
     """docstring for state."""

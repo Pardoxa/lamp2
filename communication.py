@@ -5,7 +5,7 @@ import hcipacket
 import commands
 import events
 import gap
-import gatt
+import Mygatt as gatt
 import callback
 class Device(events.EventHandler):
     def __init__(self):
@@ -79,8 +79,8 @@ class Device(events.EventHandler):
         print ("adv=", binascii.b2a_hex(self.adv.data))
         print ("scn=", binascii.b2a_hex(self.scn.data))
         CALLBACK = callback.state("1963b7b233be11e9b210d663bd873d93")
-        self.gatt = gatt.GattServer().withServices(gatt.yannickMakeService(CALLBACK)) # ...
-
+        #self.gatt = gatt.GattServer().withServices(gatt.yannickMakeService(CALLBACK)) # ...
+        self.gatt = gatt.GattServer().withServices(gatt.makeTestServices());
         self.startup_state = 0
         self.startup_next_state(None)
         return CALLBACK
