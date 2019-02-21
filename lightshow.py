@@ -4,7 +4,7 @@ import colorsys
 import math
 import time
 from itertools import cycle
-import callback
+
 
 import unicornhathd
 
@@ -36,11 +36,3 @@ class test_show:
                     unicornhathd.set_pixel(x, y, r, g, b)
             unicornhathd.show()
             time.sleep(3)
-
-def main():
-    CALLBACK = callback.state("1963b7b233be11e9b210d663bd873d93")
-    bla = test_show(CALLBACK)
-    bla.blink()
-
-if __name__ == '__main__':
-    main()

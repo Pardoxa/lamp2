@@ -21,9 +21,9 @@ def setPicture(pic, run, running):
     y = 0
     for val in list:
         pixel = val.split(",")
-        print(int(pixel[0]), end = "\t")
-        print(x, end = "\t")
-        print(y)
+        #print(int(pixel[0]), end = "\t")
+    #    print(x, end = "\t")
+    #    print(y)
         unicorn.set_pixel(x,y, int(pixel[0]), int(pixel[1]), int(pixel[2]))
         x += 1
         if x == 16:

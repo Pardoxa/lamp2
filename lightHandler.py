@@ -45,7 +45,7 @@ class lightHandler():
     def callback(self, var):
         string_var = "%s" % var
         string_var = string_var[2:-1]
-        print("test:", end="\t")
+        #print("test:", end="\t")
         print(string_var)
         if string_var.startswith("|<>#~"):
             self.command = string_var
@@ -104,7 +104,7 @@ class lightHandler():
             command = self.command[6:-6]
             print(command)
             args = parser.parse_args(shlex.split(command))
-            print("Command", end= "\t")
+            #print("Command", end= "\t")
             print(args.command)
             print(args.picture)
             return args
