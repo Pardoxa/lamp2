@@ -1,7 +1,7 @@
 
 import callback
 import time
-import _thread
+
 import icon_show
 import subprocess
 import ble2
@@ -20,10 +20,5 @@ if __name__ == '__main__':
 
     test = lightHandler.lightHandler()
 
-    try:
-        _thread.start_new_thread(test.outerLoop, (), )
-        # _thread.start_new_thread(dev.run, (), )
-    except:
-        print("ERROR")
 
     ble2.main(test.callback)

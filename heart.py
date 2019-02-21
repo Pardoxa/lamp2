@@ -135,39 +135,38 @@ def current_milli_time():
 effects = [gradient, tunnel, rainbow_search, checker, swirl]
 
 
-step = 0
-
-try:
-    #m_time = time.monotonic()
-    while True:
-        for i in range(100):
-            #s_time = max(0, 0.2 - (time.monotonic() - m_time))
-            #print((time.monotonic() - m_time), end="\t")
-            #print(s_time)
-            #time.sleep((time.monotonic() - m_time))
-    #        m_time = time.monotonic()
-            start = current_milli_time()
-            for y in range(u_height):
-                for x in range(u_width):
-                    r, g, b = effects[0](x, y, step)
-                    if i > 75:
-                        r2, g2, b2 = effects[-1](x, y, step)
-                        ratio = (100.00 - i) / 25.0
-                        r = r * ratio + r2 * (1.0 - ratio)
-                        g = g * ratio + g2 * (1.0 - ratio)
-                        b = b * ratio + b2 * (1.0 - ratio)
-                    r = int(max(0, min(255, r)))
-                    g = int(max(0, min(255, g)))
-                    b = int(max(0, min(255, b)))
-                    unicornhathd.set_pixel(x, y, r, g, b)
-
-            step += 2
-
-            unicornhathd.show()
-
-        effect = effects.pop()
-        effects.insert(0, effect)
 
 
-except KeyboardInterrupt:
-    unicornhathd.off()
+def main(run, running):
+    step = 0
+    try:
+        running(True)
+        while run():
+            for i in range(100):
+                start = current_milli_time()
+                for y in range(u_height):
+                    for x in range(u_width):
+                        r, g, b = effects[0](x, y, step)
+                        if i > 75:
+                            r2, g2, b2 = effects[-1](x, y, step)
+                            ratio = (100.00 - i) / 25.0
+                            r = r * ratio + r2 * (1.0 - ratio)
+                            g = g * ratio + g2 * (1.0 - ratio)
+                            b = b * ratio + b2 * (1.0 - ratio)
+                        r = int(max(0, min(255, r)))
+                        g = int(max(0, min(255, g)))
+                        b = int(max(0, min(255, b)))
+                        unicornhathd.set_pixel(x, y, r, g, b)
+
+                step += 2
+
+                unicornhathd.show()
+
+            effect = effects.pop()
+            effects.insert(0, effect)
+        unicornhathd.off()
+        running(False)
+
+
+    except KeyboardInterrupt:
+        unicornhathd.off()

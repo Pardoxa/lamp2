@@ -33,8 +33,9 @@ def manageConnection(socket, callback):
      data = socket.recv(1024)
      if len(data) == 0: break
      print("received [%s]" % data)
-     socket.send("Echo from Pi: [%s]\n" % data)
      callback(data)
+     socket.send("Echo from Pi: [%s]\n" % data)
+
  except IOError:
    pass
 
