@@ -6,7 +6,8 @@ import time
 import subprocess
 from random import shuffle
 
-def icon_show(func_continue):
+def icon_show(run, running):
+    running(True)
     list = []
     try:
         cmd = "echo icons/*"
@@ -44,8 +45,9 @@ def icon_show(func_continue):
         now = time.monotonic()
         while time.monotonic() - now < 10:
 
-            if not func_continue():
+            if not run():
                 unicorn.off()
+                running(False)
                 return
             time.sleep(0.1)
     unicorn.off()

@@ -71,6 +71,7 @@ class lightHandler():
                 print("waiting")
                 time.sleep(0.1)
             self.status = 0
+
             if args.command == 0:
                 print("inside 10 - color")
                 list = args.color.split(",")
@@ -78,22 +79,21 @@ class lightHandler():
 
                 _thread.start_new_thread(light_color.setColor, (list[0], list[1], list[2], self.timer_over, self.setRunning), )
             elif args.command == 20:
-
-                print("inside 20 - iconshow")
-                while self.running:
-                    print("waiting")
-                    time.sleep(0.1)
-                _thread.start_new_thread(self.runIconShow, (), )
+                _thread.start_new_thread(icon_show.icon_show, (self.timer_over, self.setRunning), )
             elif args.command == 30:
-                while self.running:
-                    print("waiting")
-                    time.sleep(0.1)
                 _thread.start_new_thread(light_color.setPicture, (args.picture, self.timer_over, self.setRunning), )
             elif args.command == 40:
-                while self.running:
-                    print("waiting")
-                    time.sleep(0.1)
                 _thread.start_new_thread(heart.main, (self.timer_over, self.setRunning), )
+            elif args.command == 41:
+                _thread.start_new_thread(heart.run_swirl, (self.timer_over, self.setRunning), )
+            elif args.command == 42:
+                _thread.start_new_thread(heart.run_rainbow_search, (self.timer_over, self.setRunning), )
+            elif args.command == 43:
+                _thread.start_new_thread(heart.run_tunnel, (self.timer_over, self.setRunning), )
+            elif args.command == 44:
+                _thread.start_new_thread(heart.run_checker, (self.timer_over, self.setRunning), )
+            elif args.command == 45:
+                _thread.start_new_thread(heart.run_gradient, (self.timer_over, self.setRunning), )
 
             # _thread.start_new_thread(dev.run, (), )
         except:

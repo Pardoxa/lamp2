@@ -134,15 +134,61 @@ def current_milli_time():
 
 effects = [gradient, tunnel, rainbow_search, checker, swirl]
 
+def run_gradient(run, running):
+    run_specific(run, running, gradient)
 
+def run_checker(run, running):
+    run_specific(run, running, checker)
+
+def run_swirl(run, running):
+    run_specific(run,running,swirl)
+
+def run_rainbow_search(run, running):
+    run_specific(run,running,rainbow_search)
+
+def run_tunnel(run, running):
+    run_specific(run, running, tunnel)
+
+def run_specific(run, running, func):
+    step = 0
+    try:
+        running(True)
+        keepRunning = run()
+        while keepRunning:
+            for i in range(100):
+                keepRunning = run()
+                if not keepRunning:
+                    break
+                start = current_milli_time()
+                for y in range(u_height):
+                    for x in range(u_width):
+                        r, g, b = func(x, y, step)
+                        r = int(max(0, min(255, r)))
+                        g = int(max(0, min(255, g)))
+                        b = int(max(0, min(255, b)))
+                        unicornhathd.set_pixel(x, y, r, g, b)
+
+                step += 2
+
+                unicornhathd.show()
+
+
+        unicornhathd.off()
+        running(False)
+    except KeyboardInterrupt:
+        unicornhathd.off()
 
 
 def main(run, running):
     step = 0
     try:
         running(True)
-        while run():
+        keepRunning = run()
+        while keepRunning:
             for i in range(100):
+                keepRunning = run()
+                if not keepRunning:
+                    break
                 start = current_milli_time()
                 for y in range(u_height):
                     for x in range(u_width):
