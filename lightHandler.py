@@ -94,6 +94,10 @@ class lightHandler():
                 _thread.start_new_thread(heart.run_checker, (self.timer_over, self.setRunning), )
             elif args.command == 45:
                 _thread.start_new_thread(heart.run_gradient, (self.timer_over, self.setRunning), )
+            elif args.command == 50:
+                list = args.color.split(",")
+                print(list)
+                _thread.start_new_thread(light_color.eye, (self.timer_over, self.setRunning, list[0], list[1], list[2]), )
 
             # _thread.start_new_thread(dev.run, (), )
         except:
