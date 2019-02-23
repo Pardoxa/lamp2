@@ -66,7 +66,7 @@ def main(run, running):
         temp = candle[:]
 
         # seed new heat
-        v = randint(495,505)
+        v = 500
         #if randint(0,100) > 90:
         #    v = randint(400,600)
         #    oldv = v

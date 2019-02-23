@@ -4,7 +4,7 @@
 import colorsys
 import time
 import random
-
+import math
 import numpy
 
 import unicornhathd as unicorn
@@ -26,11 +26,26 @@ def make_gaussian(fwhm,x0,y0):
     gauss = numpy.exp(-4 * numpy.log(2) * ((x - x0) ** 2 + (y - y0) ** 2) / fwhm ** 2)
     return gauss
 
+def constrain(var, lower, upper):
+    if var < lower:
+        return lower
+    if var > upper:
+        return upper
+    return var
+
 def main(run, running):
     print("called")
     running(True)
+    x0 = 7.5
+    y0 = 7.5
     while run():
-        x0, y0 = random.uniform(3.5,12.5), random.uniform(3.5,12.5)
+        unicorn.off()
+        time.sleep(0.03)
+        angle = random.uniform(0, math.pi * 2)
+        x0 += math.sin(angle)
+        y0 += math.cos(angle)
+        x0 = constrain(x0, 3.5, 12.5)
+        y0 = constrain(y0, 3.5, 12.5)
         for z in list(range(1, 10)[::-1]) + list(range(1, 10)):
             fwhm = 5.0/z
             gauss = make_gaussian(fwhm, x0,y0)
@@ -51,7 +66,7 @@ def main(run, running):
             unicorn.show()
             end = time.time()
             t = end - start
-            if t < 0.1:
-                time.sleep(0.1 - t)
+            if t < 0.11:
+                time.sleep(0.11 - t)
     unicorn.off()
     running(False)
