@@ -55,7 +55,7 @@ class Drawing():
   '''
   def color_from_hsv(self, h, s, v):
     rgb = colorsys.hsv_to_rgb(h, s, v)
-    return color_from_rgb( int(rgb[0]*255), int(rgb[1]*255), int(rgb[2]*255) )
+    return self.color_from_rgb( int(rgb[0]*255), int(rgb[1]*255), int(rgb[2]*255) )
 
   def pixel(self, x, y, col):
     self.buffer[(x,y)] = col
