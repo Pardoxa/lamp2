@@ -6,6 +6,7 @@ import shlex
 import argparse
 import light_color
 import heart
+import subprocess
 
 parser = argparse.ArgumentParser(description= "Parsing bluetooth command strings")
 parser.add_argument('--command', type=int)
@@ -13,10 +14,18 @@ parser.add_argument('--picture', type=str)
 parser.add_argument('--color', type=str)
 parser.add_argument('--bright', type=float)
 parser.add_argument('--dur', type=int)
+parser.add_argument('--rot', type=int)
+rot_arr = [0,90,180,270]
 args = None
 unicorn.rotation(0)
 u_width, u_height = unicorn.get_shape()
 unicorn.brightness(1.0)
+
+def fill_unicorn(red, green, blue):
+    for x in range(16):
+        for y in range(16):
+            unicorn.set_pixel(x,y,red,green,blue)
+    unicorn.show()
 
 class lightHandler():
     """docstring for lightHandler."""
@@ -71,7 +80,7 @@ class lightHandler():
                 print("waiting")
                 time.sleep(0.1)
             self.status = 0
-
+            unicorn.rotation(rot_arr[args.rot])
             if args.command == 0:
                 print("inside 10 - color")
                 list = args.color.split(",")
@@ -98,6 +107,22 @@ class lightHandler():
                 list = args.color.split(",")
                 print(list)
                 _thread.start_new_thread(light_color.eye, (self.timer_over, self.setRunning, list[0], list[1], list[2]), )
+            elif args.command == -1:
+                fill_unicorn(255,0,0);
+                time.sleep(0.4)
+                unicorn.off()
+                time.sleep(0.1)
+                fill_unicorn(0,255,0)
+                time.sleep(0.4)
+                unicorn.off()
+                time.sleep(0.1)
+                fill_unicorn(0,0,255)
+                time.sleep(0.4)
+                unicorn.off()
+                cmd = "sudo shutdown -h now"
+                process = subprocess.Popen(cmd, shell=True, stdout = subprocess.PIPE)
+                output, error = process.communicate()
+
 
             # _thread.start_new_thread(dev.run, (), )
         except:
