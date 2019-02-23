@@ -83,4 +83,5 @@ def main(run, running):
         if life.all_dead() or randint(0,1000) > 993:
             life.random_new_live()
         time.sleep(0.05)
+    unicornhathd.off()
     running(False)
