@@ -110,6 +110,7 @@ class lightHandler():
             elif args.command == 50:
                 list = args.color.split(",")
                 print(list)
+                unicorn.rotation(rot_arr[(args.rot + 1) % 4])
                 _thread.start_new_thread(light_color.eye, (self.timer_over, self.setRunning, list[0], list[1], list[2]), )
             elif args.command == -1:
                 fill_unicorn(255,0,0);
@@ -127,6 +128,7 @@ class lightHandler():
                 process = subprocess.Popen(cmd, shell=True, stdout = subprocess.PIPE)
                 output, error = process.communicate()
             elif args.command == 60:
+                unicorn.rotation(rot_arr[(args.rot - 1) % 4])
                 _thread.start_new_thread(candle.main, (self.timer_over, self.setRunning), )
             elif args.command == 70:
                 _thread.start_new_thread(stars.main, (self.timer_over, self.setRunning), )
