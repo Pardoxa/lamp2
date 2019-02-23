@@ -4,7 +4,7 @@ from Cython.Distutils import build_ext
 
 ext_modules = [
     Extension("lightshow", ["lightshow.py"]),
-    Extension("heart",["heart.py"]),
+    Extension("demo",["demo.py"]),
     Extension("ble2",["ble2.py"]),
     Extension("light_color",["light_color.py"]),
     Extension("icon_show",["icon_show.py"]),

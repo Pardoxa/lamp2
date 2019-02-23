@@ -5,7 +5,7 @@ import _thread
 import shlex
 import argparse
 import light_color
-import heart
+import demo
 import subprocess
 
 parser = argparse.ArgumentParser(description= "Parsing bluetooth command strings")
@@ -92,17 +92,17 @@ class lightHandler():
             elif args.command == 30:
                 _thread.start_new_thread(light_color.setPicture, (args.picture, self.timer_over, self.setRunning), )
             elif args.command == 40:
-                _thread.start_new_thread(heart.main, (self.timer_over, self.setRunning), )
+                _thread.start_new_thread(demo.main, (self.timer_over, self.setRunning), )
             elif args.command == 41:
-                _thread.start_new_thread(heart.run_swirl, (self.timer_over, self.setRunning), )
+                _thread.start_new_thread(demo.run_swirl, (self.timer_over, self.setRunning), )
             elif args.command == 42:
-                _thread.start_new_thread(heart.run_rainbow_search, (self.timer_over, self.setRunning), )
+                _thread.start_new_thread(demo.run_rainbow_search, (self.timer_over, self.setRunning), )
             elif args.command == 43:
-                _thread.start_new_thread(heart.run_tunnel, (self.timer_over, self.setRunning), )
+                _thread.start_new_thread(demo.run_tunnel, (self.timer_over, self.setRunning), )
             elif args.command == 44:
-                _thread.start_new_thread(heart.run_checker, (self.timer_over, self.setRunning), )
+                _thread.start_new_thread(demo.run_checker, (self.timer_over, self.setRunning), )
             elif args.command == 45:
-                _thread.start_new_thread(heart.run_gradient, (self.timer_over, self.setRunning), )
+                _thread.start_new_thread(demo.run_gradient, (self.timer_over, self.setRunning), )
             elif args.command == 50:
                 list = args.color.split(",")
                 print(list)
