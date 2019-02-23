@@ -4,6 +4,7 @@ from PIL import Image
 import numpy as np
 from random import randint
 from random import uniform
+import subprocess
 
 u_width, u_height = unicorn.get_shape()
 
@@ -51,7 +52,11 @@ def eye_helper(matrix, center_x, center_y):
             unicorn.set_pixel(x,y,255,255,255)
 def eye(run, running, red, green, blue):
     running(True)
-    img = Image.open("./res/circle-16.png")
+    cmd = "echo ~/lamp2/res/circle-16.png"
+    process = subprocess.Popen(cmd, shell=True, stdout = subprocess.PIPE)
+    output, error = process.communicate()
+    output = str(output)[2:-3]
+    img = Image.open(output)
     img.load()
     try:
         background = Image.new("RGB", img.size, (0, 0, 0))
