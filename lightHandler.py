@@ -7,6 +7,10 @@ import argparse
 import light_color
 import demo
 import subprocess
+import candle
+import stars
+import rainbow
+import game_of_life
 
 parser = argparse.ArgumentParser(description= "Parsing bluetooth command strings")
 parser.add_argument('--command', type=int)
@@ -122,6 +126,14 @@ class lightHandler():
                 cmd = "sudo shutdown -h now"
                 process = subprocess.Popen(cmd, shell=True, stdout = subprocess.PIPE)
                 output, error = process.communicate()
+            elif args.command == 60:
+                _thread.start_new_thread(candle.main, (self.timer_over, self.setRunning), )
+            elif args.command == 70:
+                _thread.start_new_thread(stars.main, (self.timer_over, self.setRunning), )
+            elif args.command == 80:
+                _thread.start_new_thread(rainbow.main, (self.timer_over, self.setRunning), )
+            elif args.command == 90:
+                _thread.start_new_thread(game_of_life.main, (self.timer_over, self.setRunning), )
 
 
             # _thread.start_new_thread(dev.run, (), )

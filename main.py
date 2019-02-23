@@ -19,6 +19,8 @@ if __name__ == '__main__':
     try:
         process = subprocess.Popen(startBluetoothCmd.split(), stdout = subprocess.PIPE)
         output, error = process.communicate()
+        print(output)
+        print("error:" + error)
     except:
         print("except 2")
 

@@ -8,7 +8,11 @@ ext_modules = [
     Extension("ble2",["ble2.py"]),
     Extension("light_color",["light_color.py"]),
     Extension("icon_show",["icon_show.py"]),
-    Extension("lightHandler",["lightHandler.py"]),
+    Extension("candle",["candle.py"]),
+    Extension("stars",["stars.py"]),
+    Extension("rainbow",["rainbow.py"]),
+    Extension("game_of_life",["game_of_life.py"]),
+    Extension("lightHandler",["lightHandler.py"])
 
 ]
 

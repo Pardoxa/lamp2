@@ -10,7 +10,7 @@ def icon_show(run, running):
     running(True)
     list = []
     try:
-        cmd = "echo icons/*"
+        cmd = "echo ~/lamp2/icons/*"
         cmd2 = "pwd"
         process = subprocess.Popen(cmd, shell=True, stdout = subprocess.PIPE)
         output, error = process.communicate()
@@ -51,6 +51,7 @@ def icon_show(run, running):
                 return
             time.sleep(0.1)
     unicorn.off()
+    running(False)
 
 def test_continue():
     return True

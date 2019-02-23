@@ -10,6 +10,9 @@ The python project
 
 http://it-in-der-hosentasche.blogspot.com/2014/03/bluetooth-zwischen-raspberry-pi-und.html
 
+## lamp:
+https://github.com/pimoroni/unicorn-hat-hd/tree/master/examples
+
 # Fix
 https://raspberrypi.stackexchange.com/questions/41776/failed-to-connect-to-sdp-server-on-ffffff000000-no-such-file-or-directory
 
