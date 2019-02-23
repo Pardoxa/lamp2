@@ -12,6 +12,11 @@ ext_modules = [
     Extension("stars",["stars.py"]),
     Extension("rainbow",["rainbow.py"]),
     Extension("game_of_life",["game_of_life.py"]),
+    Extension("drop",["drop.py"]),
+    Extension("rainbow_dot",["rainbow_dot.py"]),
+    Extension("cross",["cross.py"]),
+    Extension("graphics",["graphics.py"]),
+    Extension("unicorn_clock",["unicorn_clock.py"]),
     Extension("lightHandler",["lightHandler.py"])
 
 ]

@@ -11,6 +11,10 @@ import candle
 import stars
 import rainbow
 import game_of_life
+import drop
+import rainbow_dot
+import cross
+import unicorn_clock
 
 parser = argparse.ArgumentParser(description= "Parsing bluetooth command strings")
 parser.add_argument('--command', type=int)
@@ -85,11 +89,11 @@ class lightHandler():
                 time.sleep(0.1)
             self.status = 0
             unicorn.rotation(rot_arr[args.rot])
+            print("if following")
             if args.command == 0:
                 print("inside 10 - color")
                 list = args.color.split(",")
                 print(list)
-
                 _thread.start_new_thread(light_color.setColor, (list[0], list[1], list[2], self.timer_over, self.setRunning), )
             elif args.command == 20:
                 _thread.start_new_thread(icon_show.icon_show, (self.timer_over, self.setRunning), )
@@ -136,7 +140,15 @@ class lightHandler():
                 _thread.start_new_thread(rainbow.main, (self.timer_over, self.setRunning), )
             elif args.command == 90:
                 _thread.start_new_thread(game_of_life.main, (self.timer_over, self.setRunning), )
-
+            elif args.command == 100:
+                _thread.start_new_thread(drop.main, (self.timer_over, self.setRunning), )
+            elif args.command == 110:
+                print("rainbow_dot")
+                _thread.start_new_thread(rainbow_dot.main, (self.timer_over, self.setRunning), )
+            elif args.command == 120:
+                _thread.start_new_thread(cross.main, (self.timer_over, self.setRunning), )
+            elif args.command == 130:
+                _thread.start_new_thread(unicorn_clock.main, (self.timer_over, self.setRunning), )
 
             # _thread.start_new_thread(dev.run, (), )
         except:
