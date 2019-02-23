@@ -27,3 +27,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/gam
 At the end of the crontab. Note: crontab has to end with new line!
 
 Not everything in the Crontab is needed - filter not needed parts when I build the next lamp
+
+
+# compile
+python3 compile.py build_ext --inplace
