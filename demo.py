@@ -12,9 +12,9 @@ This pixel shading demo transitions between 4 classic graphics demo effects.
 Press Ctrl+C to exit!
 """)
 
-unicornhathd.rotation(0)
+#unicornhathd.rotation(0)
 u_width, u_height = unicornhathd.get_shape()
-unicornhathd.brightness(1.0)
+#unicornhathd.brightness(1.0)
 # Generate a lookup table for 8bit hue to RGB conversion
 hue_to_rgb = []
 
