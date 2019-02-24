@@ -215,11 +215,10 @@ def eye_helper(center_x, center_y, h, s, v, calc_dist = True):
     # draw iris
     for x in range(center_x - 1, center_x + 2):
         for y in range(center_y - 1, center_y + 2):
-            unicorn.set_pixel(x, y, 255, 255, 255)
+            unicorn.set_pixel(x, y, 0, 0, 0)
+    for y in [center_y - 2, center_y + 2]:
+        unicorn.set_pixel(center_x, y, 0, 0, 0)
 
-    for x in [center_x - 2, center_x + 2]:
-        for y in [center_y - 2, center_y + 2]:
-            unicorn.set_pixel(x, y, 255, 255, 255)
 
 def eye(run, running, h, s, v):
     global matrix
@@ -236,17 +235,17 @@ def eye(run, running, h, s, v):
     last_blinked = time.monotonic()
 
     # current eye position
-    position_x = randint(5,12)
-    position_y = randint(5,12)
+    position_x = randint(5, 12)
+    position_y = randint(5, 12)
     while run():
         if twice:
-            time.sleep(uniform(0.05,0.2))
+            time.sleep(uniform(0.05, 0.2))
         else:
-            time.sleep(uniform(0.1,0.5))
+            time.sleep(uniform(0.1, 0.5))
         blink = False
-        if randint(0,1000) > 900:
-            position_x = randint(5,12)
-            position_y = randint(5,12)
+        if randint(0, 1000) > 900:
+            position_x = randint(5, 12)
+            position_y = randint(5, 12)
             eye_helper(position_x, position_y, h, s, v)
         if randint(0,1000) > 950:
             blink = True
