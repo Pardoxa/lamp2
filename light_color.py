@@ -221,7 +221,6 @@ def eye_helper(center_x, center_y, h, s, v, calc_dist = True):
 
 
 def eye(run, running, h, s, v):
-    global matrix
     h = float(h) / 360.0
     s = float(s)
     v = float(v)
@@ -234,27 +233,48 @@ def eye(run, running, h, s, v):
     twice = False
     last_blinked = time.monotonic()
 
-    # current eye position
+    # random iris position
     position_x = randint(5, 12)
     position_y = randint(5, 12)
+
+    edges = [5, 12]
+
+    # don't allow the outer edges
+    while position_x in edges and position_y in edges:
+        position_x = randint(5, 12)
+        position_y = randint(5, 12)
+
     while run():
-        if twice:
-            time.sleep(uniform(0.05, 0.2))
-        else:
-            time.sleep(uniform(0.1, 0.5))
+        if not twice:
+            time.sleep(uniform(0.2, 0.5))
         blink = False
-        if randint(0, 1000) > 900:
+
+        # where is the eye looking
+        if randint(0, 1000) > 800:
             position_x = randint(5, 12)
             position_y = randint(5, 12)
+
+            # don't allow the outer edges
+            while position_x in edges and position_y in edges:
+                position_x = randint(5, 12)
+                position_y = randint(5, 12)
+
+            # draw eye
             eye_helper(position_x, position_y, h, s, v)
-        if randint(0,1000) > 950:
+            unicorn.show()
+
+        # should it blink? (twice?)
+        if randint(0,1000) > 950 and not twice:
             blink = True
+            twice = randint(0, 100) > 70
+
+        # blink if random number says so or 5 seconds have passed since last blink
         if blink or twice or time.monotonic() - last_blinked > 5:
-            last_blinked = time.monotonic()
-            if twice:
+
+            if blink:
+                blink = False
+            elif twice:
                 twice = False
-            else:
-                twice = randint(0,100) > 75
 
             # close eye
             for y in range(8):
@@ -272,10 +292,13 @@ def eye(run, running, h, s, v):
                         unicorn.set_pixel(x, y, 0, 0, 0)
                         unicorn.set_pixel(x, 15 - y, 0, 0, 0)
                 unicorn.show()
-        unicorn.show()
+
+            if not twice:
+                time.sleep(0.5)
+
+            last_blinked = time.monotonic()
 
     unicorn.off()
-    print(matrix)
     running(False)
 
 def test_run():

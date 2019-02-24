@@ -77,11 +77,15 @@ def main(run, running):
     running(True)
     life = GameOfLife()
 
+    life_last_seeded = time.monotonic()
     while run():
         life.next_generation()
         life.show_board()
-        if life.all_dead() or randint(0,1000) > 993:
+
+        duration = time.monotonic() - life_last_seeded
+        if life.all_dead() or ((randint(0,1000) > 990) and duration > 15) or duration > 100:
             life.random_new_live()
+            life_last_seeded = time.monotonic()
         time.sleep(0.05)
     unicornhathd.off()
     running(False)
