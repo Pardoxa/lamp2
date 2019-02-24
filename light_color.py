@@ -11,7 +11,7 @@ import colorsys
 
 
 u_width, u_height = unicorn.get_shape()
-#temp = np.zeros((16,16))
+
 dists = np.zeros((16,16))
 hue_map = np.zeros((16,16))
 
@@ -19,7 +19,7 @@ hue_map = np.zeros((16,16))
 def make_mapping(v,x0,y0):
     global dists
     global hue_map
-    #distances = [math.sqrt(int(i / 16) * int(i / 16) + int(i % 16)* int(i % 16)) for i in range(256)]
+
     for x in range(16):
         for y in range(16):
             dists[x][y] = (x - x0) * (x - x0) + (y - y0) * (y - y0)
@@ -34,12 +34,12 @@ def hue_wave(run, running):
     running(True)
 
     v = 1
-    x0 = 0
-    y0 = 0
+    x0 = uniform(0,15)
+    y0 = uniform(0,15)
     y_goal = uniform(0,15)
     x_goal = uniform(0,15)
-    step1 = 0
-    step2 = 0
+    step1 = uniform(0, math.pi * 2)
+    step2 = uniform(0, math.pi * 2)
     while run() and v != 0:
         if x0 == x_goal and y0 == y_goal:
             print("hue_wave - arrived",end="\tx:\t")
@@ -67,8 +67,8 @@ def hue_wave(run, running):
                 s = (math.sin(step2 + mapped_distance) + 1) * 0.5
                 unicorn.set_pixel_hsv(x, y, h, s, v_from_hue_map)
 
-        step1 += math.pi * 0.0101
-        step2 += math.pi * 0.015003
+        step1 += math.pi * 0.01
+        step2 += math.e * 0.01
         unicorn.show()
 
     unicorn.off()
@@ -91,8 +91,8 @@ def setColor(red, green, blue, run, running):
     blue = int(blue)
     h,s,v = colorsys.rgb_to_hsv(red, green, blue)
     v /= 255
-    x0 = 0
-    y0 = 0
+    x0 = uniform(0,15)
+    y0 = uniform(0,15)
     y_goal = uniform(0,15)
     x_goal = uniform(0,15)
     while run() and v != 0:
