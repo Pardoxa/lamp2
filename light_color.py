@@ -15,6 +15,7 @@ u_width, u_height = unicorn.get_shape()
 dists = np.zeros((16,16))
 hue_map = np.zeros((16,16))
 
+
 def make_mapping(v,x0,y0):
     global dists
     global hue_map
@@ -26,14 +27,52 @@ def make_mapping(v,x0,y0):
     maximum = np.amax(dists)
     v_times_inverseMaximum = v / maximum
     hue_map = (maximum - dists) * v_times_inverseMaximum
-    #for x in range(16):
-    #    for y in range(16):
-    #        hue_map[x][y] = (maximum - dists[x][y]) * v_times_inverseMaximum
 
 
-#def getPixel(x,y,x_offset,y_offset, map):
-#    print(map)
-#    return map[int(abs(x-x_offset))][int(abs(y-y_offset))]
+def hue_wave(run, running):
+    global dists
+    running(True)
+
+    v = 1
+    x0 = 0
+    y0 = 0
+    y_goal = uniform(0,15)
+    x_goal = uniform(0,15)
+    step1 = 0
+    step2 = 0
+    while run() and v != 0:
+        if x0 == x_goal and y0 == y_goal:
+            print("hue_wave - arrived",end="\tx:\t")
+            print(x_goal,end="\ty:\t")
+            print(y_goal)
+            y_goal = uniform(0,15)
+            x_goal = uniform(0,15)
+
+        direction = [x_goal - x0, y_goal - y0]
+        distance = np.linalg.norm(direction)
+        #distance = math.sqrt(direction[0] * direction[0] + direction[1] * direction[1])
+        if distance > 0.05:
+            rescale = 0.05 / distance
+            direction[0] *= rescale
+            direction[1] *= rescale
+
+        x0 += direction[0]
+        y0 += direction[1]
+        make_mapping(v, x0, y0)
+        maximum = np.amax(dists)
+        dists *= math.pi / maximum
+        for x in range(u_width):
+            for y, v_from_hue_map, mapped_distance in zip(range(u_height), hue_map[x], dists[x]):
+                h = (math.sin(step1 + mapped_distance) + 1) * 0.5
+                s = (math.sin(step2 + mapped_distance) + 1) * 0.5
+                unicorn.set_pixel_hsv(x, y, h, s, v_from_hue_map)
+
+        step1 += math.pi * 0.0101
+        step2 += math.pi * 0.015003
+        unicorn.show()
+
+    unicorn.off()
+    running(False)
 
 def _constrain(x):
     if x < 0:
@@ -58,7 +97,7 @@ def setColor(red, green, blue, run, running):
     x_goal = uniform(0,15)
     while run() and v != 0:
         if x0 == x_goal and y0 == y_goal:
-            print("angekommen",end="\tx:\t")
+            print("color - arrived",end="\tx:\t")
             print(x_goal,end="\ty:\t")
             print(y_goal)
             y_goal = uniform(0,15)
@@ -185,14 +224,8 @@ def test_running(var):
 
 def main():
     unicorn.brightness(1)
-    setColor(255,0,255,test_run,test_running)
-    #h,s, map = get_mapping(255,0,0)
-    #for x in range(16):
-    #    for y in range(16):
-    #        print(map[x+y*16],end ="\t")
-    #        unicorn.set_pixel_hsv(x,y,h,s,getPixel(x,y,3,0,map))
-    #    print()
-    #unicorn.show()
+    #setColor(255,0,255,test_run,test_running)
+    hue_wave(test_run, test_running)
 
 if __name__ == '__main__':
     main()

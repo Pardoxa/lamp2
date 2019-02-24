@@ -149,6 +149,8 @@ class lightHandler():
                 _thread.start_new_thread(cross.main, (self.timer_over, self.setRunning), )
             elif args.command == 130:
                 _thread.start_new_thread(unicorn_clock.main, (self.timer_over, self.setRunning), )
+            elif args.command == 140:
+                _thread.start_new_thread(light_color.hue_wave, (self.timer_over, self.setRunning), )
 
             # _thread.start_new_thread(dev.run, (), )
         except:
