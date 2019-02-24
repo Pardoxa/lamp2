@@ -16,7 +16,7 @@ dists = np.zeros((16,16))
 hue_map = np.zeros((16,16))
 
 
-def make_mapping(v,x0,y0):
+def make_mapping(v, x0, y0, with_hue = True):
     global dists
     global hue_map
 
@@ -24,9 +24,10 @@ def make_mapping(v,x0,y0):
         for y in range(16):
             dists[x][y] = (x - x0) * (x - x0) + (y - y0) * (y - y0)
     np.sqrt(dists, out = dists)
-    maximum = np.amax(dists)
-    v_times_inverseMaximum = v / maximum
-    hue_map = (maximum - dists) * v_times_inverseMaximum
+    if with_hue:
+        maximum = np.amax(dists)
+        v_times_inverseMaximum = v / maximum
+        hue_map = (maximum - dists) * v_times_inverseMaximum
 
 
 def hue_wave(run, running):
@@ -34,8 +35,12 @@ def hue_wave(run, running):
     running(True)
 
     v = 1
+
+    # x0, y0 current center
     x0 = uniform(0,15)
     y0 = uniform(0,15)
+
+    # y_goal, x_goal -> goal
     y_goal = uniform(0,15)
     x_goal = uniform(0,15)
     step1 = uniform(0, math.pi * 2)
@@ -45,22 +50,30 @@ def hue_wave(run, running):
             print("hue_wave - arrived",end="\tx:\t")
             print(x_goal,end="\ty:\t")
             print(y_goal)
+
+            # goal reached, create new goal
             y_goal = uniform(0,15)
             x_goal = uniform(0,15)
 
         direction = [x_goal - x0, y_goal - y0]
         distance = np.linalg.norm(direction)
-        #distance = math.sqrt(direction[0] * direction[0] + direction[1] * direction[1])
+
+        # 0.05 is max velocity of movement
         if distance > 0.05:
             rescale = 0.05 / distance
             direction[0] *= rescale
             direction[1] *= rescale
 
+        # move towards goal
         x0 += direction[0]
         y0 += direction[1]
+
+        # create dists and hue_map
         make_mapping(v, x0, y0)
         maximum = np.amax(dists)
         dists *= math.pi / maximum
+
+        # set colors
         for x in range(u_width):
             for y, v_from_hue_map, mapped_distance in zip(range(u_height), hue_map[x], dists[x]):
                 h = (math.sin(step1 + mapped_distance) + 1) * 0.5
@@ -84,15 +97,16 @@ def _constrain(x):
 def constrain(x, y):
     return _constrain(x), _constrain(y)
 
-def setColor(red, green, blue, run, running):
+def setColor(h, s, v, run, running):
     running(True)
-    red = int(red)
-    green = int(green)
-    blue = int(blue)
-    h,s,v = colorsys.rgb_to_hsv(red, green, blue)
-    v /= 255
+    h = float(h) / 360.0
+    s = float(s)
+    v = float(v)
+    # x0, y0 current center
     x0 = uniform(0,15)
     y0 = uniform(0,15)
+
+    # y_goal, x_goal -> goal
     y_goal = uniform(0,15)
     x_goal = uniform(0,15)
     while run() and v != 0:
@@ -100,28 +114,32 @@ def setColor(red, green, blue, run, running):
             print("color - arrived",end="\tx:\t")
             print(x_goal,end="\ty:\t")
             print(y_goal)
+
+            # goal reached, create new goal
             y_goal = uniform(0,15)
             x_goal = uniform(0,15)
 
         direction = [x_goal - x0, y_goal - y0]
         distance = np.linalg.norm(direction)
-        #distance = math.sqrt(direction[0] * direction[0] + direction[1] * direction[1])
+
+        # 0.05 is max velocity of movement
         if distance > 0.05:
             rescale = 0.05 / distance
             direction[0] *= rescale
             direction[1] *= rescale
 
+        # move towards goal
         x0 += direction[0]
         y0 += direction[1]
+
+        #create dists and hue_map
         make_mapping(v,x0,y0)
 
         for x in range(u_width):
             for y, v_from_hue_map in zip(range(u_height), hue_map[x]):
                 unicorn.set_pixel_hsv(x, y, h, s, v_from_hue_map)
-                #unicorn.set_pixel_hsv(x,y,h,s,hue_map[x][y])
-                #unicorn.set_pixel(x,y,red,green,blue)
         unicorn.show()
-        #time.sleep(0.1)
+
     unicorn.off()
     running(False)
 
@@ -146,48 +164,90 @@ def setPicture(pic, run, running):
     unicorn.off()
     running(False)
 
-def eye_helper(matrix, center_x, center_y):
+circle = np.array([
+            np.array([0,0,0,0,0.149019607843,0.545098039216,0.811764705882,0.945098039216,0.945098039216,0.827450980392,0.56862745098,0.164705882353,0,0,0,0]),
+            np.array([0,0,0.0156862745098,0.537254901961,0.98431372549,1.0,1.0,1.0,1.0,1.0,1.0,0.992156862745,0.58431372549,0.0313725490196,0,0]),
+            np.array([0,0.0156862745098,0.686274509804,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.733333333333,0.0313725490196,0]),
+            np.array([0,0.529411764706,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.6,0]),
+            np.array([0.141176470588,0.98431372549,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.992156862745,0.180392156863]),
+            np.array([0.529411764706,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.592156862745]),
+            np.array([0.780392156863,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.850980392157]),
+            np.array([0.913725490196,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.960784313725]),
+            np.array([0.913725490196,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.960784313725]),
+            np.array([0.788235294118,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.850980392157]),
+            np.array([0.529411764706,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.592156862745]),
+            np.array([0.133333333333,0.98431372549,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.992156862745,0.188235294118]),
+            np.array([0,0.537254901961,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.6,0]),
+            np.array([0,0.0156862745098,0.686274509804,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.741176470588,0.0313725490196,0]),
+            np.array([0,0,0.0156862745098,0.545098039216,0.98431372549,1.0,1.0,1.0,1.0,1.0,1.0,0.992156862745,0.592156862745,0.0313725490196,0,0]),
+            np.array([0,0,0,0,0.149019607843,0.552941176471,0.811764705882,0.945098039216,0.952941176471,0.827450980392,0.56862745098,0.172549019608,0,0,0,0])
+        ])
+# rgb_picture, because hsv is slow and I can reuse the rgb values
+rgb_picture = np.zeros((16,16,3),dtype = int)
+
+def eye_helper(center_x, center_y, h, s, v, calc_dist = True):
+    global dists
+    global circle
+    global rgb_picture
+    if calc_dist:
+        # calculate distances
+        make_mapping(1, center_x, center_y, False)
+
+        # map inverse distance to brightness
+        maximum = np.amax(dists)
+        dists = v * (maximum - dists) / maximum
+
+        # mask with circle
+        np.multiply(dists, circle, out = dists)
+
+        # map hsv values to rgb_picture
+        for x in range(16):
+            for y in range(16):
+                temp = colorsys.hsv_to_rgb(h, s, dists[x][y])
+                for i in range(3):
+                    rgb_picture[x][y][i] = int(temp[i] * 255)
+        #print(rgb_picture)
     for x in range(16):
-        for y in range(16):
-            unicorn.set_pixel(x, y, matrix[x][y][0], matrix[x][y][1], matrix[x][y][2])
-    for x in range(center_x-1,center_x+2):
-        for y in range(center_y-1,center_y+2):
-            unicorn.set_pixel(x,y,255,255,255)
-    for x in [center_x-2, center_x+2]:
-        for y in [center_y-2, center_y+2]:
-            unicorn.set_pixel(x,y,255,255,255)
-def eye(run, running, red, green, blue):
+        for y, rgb in zip(range(16), rgb_picture[x]):
+
+            unicorn.set_pixel(x, y, rgb[0], rgb[1], rgb[2])
+
+    # draw iris
+    for x in range(center_x - 1, center_x + 2):
+        for y in range(center_y - 1, center_y + 2):
+            unicorn.set_pixel(x, y, 255, 255, 255)
+
+    for x in [center_x - 2, center_x + 2]:
+        for y in [center_y - 2, center_y + 2]:
+            unicorn.set_pixel(x, y, 255, 255, 255)
+
+def eye(run, running, h, s, v):
+    global matrix
+    h = float(h) / 360.0
+    s = float(s)
+    v = float(v)
+
     running(True)
-    cmd = "echo ~/lamp2/res/circle-16.png"
-    process = subprocess.Popen(cmd, shell=True, stdout = subprocess.PIPE)
-    output, error = process.communicate()
-    output = str(output)[2:-3]
-    img = Image.open(output)
-    img.load()
-    try:
-        background = Image.new("RGB", img.size, (0, 0, 0))
-        background.paste(img, mask=img.split()[3]) # 3 is the alpha channel
-    except:
-        background = img
-    A = np.asarray(background)
-    matrix = [[[(int(var[0]) * int(i)) / 255 for i in [red, green, blue]] for var in list ] for list in A]
 
-
-    eye_helper(matrix,8,8)
+    eye_helper(8, 8, h, s, v)
 
     unicorn.show()
     twice = False
     last_blinked = time.monotonic()
+
+    # current eye position
+    position_x = randint(5,12)
+    position_y = randint(5,12)
     while run():
         if twice:
             time.sleep(uniform(0.05,0.2))
         else:
             time.sleep(uniform(0.1,0.5))
         blink = False
-        position_x = randint(5,12)
-        position_y = randint(5,12)
         if randint(0,1000) > 900:
-            eye_helper(matrix,position_x,position_y)
+            position_x = randint(5,12)
+            position_y = randint(5,12)
+            eye_helper(position_x, position_y, h, s, v)
         if randint(0,1000) > 950:
             blink = True
         if blink or twice or time.monotonic() - last_blinked > 5:
@@ -196,20 +256,23 @@ def eye(run, running, red, green, blue):
                 twice = False
             else:
                 twice = randint(0,100) > 75
+
+            # close eye
             for y in range(8):
                 for x in range (16):
-                    unicorn.set_pixel(x,y,0,0,0)
-                    unicorn.set_pixel(x,15-y,0,0,0)
+                    unicorn.set_pixel(x, y, 0, 0, 0)
+                    unicorn.set_pixel(x, 15 - y, 0, 0, 0)
                 unicorn.show()
                 time.sleep(0.003)
+
+            # open eye
             for i in reversed(range(8)):
-                eye_helper(matrix,position_x,position_y)
+                eye_helper(position_x, position_y, h, s, v, calc_dist = False )
                 for y in range(i):
                     for x in range (16):
-                        unicorn.set_pixel(x,y,0,0,0)
-                        unicorn.set_pixel(x,15-y,0,0,0)
+                        unicorn.set_pixel(x, y, 0, 0, 0)
+                        unicorn.set_pixel(x, 15 - y, 0, 0, 0)
                 unicorn.show()
-                time.sleep(0.001)
         unicorn.show()
 
     unicorn.off()
