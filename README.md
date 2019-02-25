@@ -7,11 +7,13 @@ The python project
 
 
 # used as base:
+Tutorial for bluetooth communication between Android and Raspberry:
 
 http://it-in-der-hosentasche.blogspot.com/2014/03/bluetooth-zwischen-raspberry-pi-und.html
 
-## lamp:
+## Useful repositorys:
 https://github.com/pimoroni/unicorn-hat-hd/tree/master/examples
+https://github.com/pimoroni/unicorn-hat
 
 # Fix
 https://raspberrypi.stackexchange.com/questions/41776/failed-to-connect-to-sdp-server-on-ffffff000000-no-such-file-or-directory
