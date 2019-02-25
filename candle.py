@@ -6,7 +6,8 @@ from random import randint
 
 import unicornhathd
 
-# credits: https://github.com/pimoroni/unicorn-hat-hd/blob/master/examples/candle.py
+# See: https://github.com/pimoroni/unicorn-hat-hd/blob/master/examples/candle.py
+# Which was used as base and changed to fit my needs
 
 def candle_setup():
 
@@ -67,11 +68,6 @@ def main(run, running):
 
         # seed new heat
         v = 500
-        #if randint(0,100) > 90:
-        #    v = randint(400,600)
-        #    oldv = v
-        #else:
-        #    v = oldv
 
         set_pixel(candle, 6, 15, v)
         set_pixel(candle, 7, 15, v)

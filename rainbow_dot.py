@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
-# credit: https://raw.githubusercontent.com/pimoroni/unicorn-hat/master/examples/rainbow_blinky.py
+# See: https://raw.githubusercontent.com/pimoroni/unicorn-hat/master/examples/rainbow_blinky.py
+# or: https://github.com/pimoroni/unicorn-hat/blob/master/examples/rainbow_blinky.py
+# Which was used as base and changed to fit my needs
+
 import colorsys
 import time
 import random

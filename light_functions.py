@@ -9,16 +9,26 @@ import subprocess
 import math
 import colorsys
 
+# Created by Yannick Feld February 2019
+
+"""
+    Contains functions called by lightHandler:
+
+    hsv_wave
+    eye
+    Color
+    setPicture
+"""
 
 u_width, u_height = unicorn.get_shape()
 
 dists = np.zeros((16,16))
-hue_map = np.zeros((16,16))
+v_map = np.zeros((16,16))
 
-
+# creates map of distances from x0 and y0 for pixels, creates v_map (v from hsv) based on distance
 def make_mapping(v, x0, y0, with_hue = True):
     global dists
-    global hue_map
+    global v_map
 
     for x in range(16):
         for y in range(16):
@@ -27,10 +37,10 @@ def make_mapping(v, x0, y0, with_hue = True):
     if with_hue:
         maximum = np.amax(dists)
         v_times_inverseMaximum = v / maximum
-        hue_map = (maximum - dists) * v_times_inverseMaximum
+        v_map = (maximum - dists) * v_times_inverseMaximum
 
 
-def hue_wave(run, running):
+def hsv_wave(run, running):
     global dists
     running(True)
 
@@ -47,7 +57,7 @@ def hue_wave(run, running):
     step2 = uniform(0, math.pi * 2)
     while run() and v != 0:
         if x0 == x_goal and y0 == y_goal:
-            print("hue_wave - arrived",end="\tx:\t")
+            print("hsv_wave - arrived",end="\tx:\t")
             print(x_goal,end="\ty:\t")
             print(y_goal)
 
@@ -68,17 +78,17 @@ def hue_wave(run, running):
         x0 += direction[0]
         y0 += direction[1]
 
-        # create dists and hue_map
+        # create dists and v_map
         make_mapping(v, x0, y0)
         maximum = np.amax(dists)
         dists *= math.pi / maximum
 
         # set colors
         for x in range(u_width):
-            for y, v_from_hue_map, mapped_distance in zip(range(u_height), hue_map[x], dists[x]):
+            for y, v_from_v_map, mapped_distance in zip(range(u_height), v_map[x], dists[x]):
                 h = (math.sin(step1 + mapped_distance) + 1) * 0.5
-                s = (math.sin(step2 + mapped_distance) + 1) * 0.5
-                unicorn.set_pixel_hsv(x, y, h, s, v_from_hue_map)
+                s = math.sqrt((math.sin(step2 + mapped_distance) + 1) * 0.5)
+                unicorn.set_pixel_hsv(x, y, h, s, v_from_v_map)
 
         step1 += math.pi * 0.01
         step2 += math.e * 0.01
@@ -97,7 +107,7 @@ def _constrain(x):
 def constrain(x, y):
     return _constrain(x), _constrain(y)
 
-def setColor(h, s, v, run, running):
+def Color(h, s, v, run, running):
     running(True)
     h = float(h) / 360.0
     s = float(s)
@@ -132,12 +142,12 @@ def setColor(h, s, v, run, running):
         x0 += direction[0]
         y0 += direction[1]
 
-        #create dists and hue_map
+        #create dists and v_map
         make_mapping(v,x0,y0)
 
         for x in range(u_width):
-            for y, v_from_hue_map in zip(range(u_height), hue_map[x]):
-                unicorn.set_pixel_hsv(x, y, h, s, v_from_hue_map)
+            for y, v_from_v_map in zip(range(u_height), v_map[x]):
+                unicorn.set_pixel_hsv(x, y, h, s, v_from_v_map)
         unicorn.show()
 
     unicorn.off()
@@ -310,7 +320,7 @@ def test_running(var):
 def main():
     unicorn.brightness(1)
     #setColor(255,0,255,test_run,test_running)
-    hue_wave(test_run, test_running)
+    hsv_wave(test_run, test_running)
 
 if __name__ == '__main__':
     main()

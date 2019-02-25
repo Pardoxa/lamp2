@@ -1,4 +1,5 @@
-import lightshow
+# Created by Yannick Feld February 2019
+
 import unicornhathd as unicorn
 import numpy as np
 from PIL import Image

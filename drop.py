@@ -1,14 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+
+# See: https://github.com/pimoroni/unicorn-hat/blob/master/examples/drop.py
+# it was used as base and changed to my needs
 
 import time
 from random import randint
 
 import unicornhathd as unicorn
 
-# credit: https://github.com/pimoroni/unicorn-hat/blob/master/examples/drop.py
-
-
-#unicorn.set_layout(unicorn.AUTO)
 uh_width,uh_height=unicorn.get_shape()
 
 heights = []

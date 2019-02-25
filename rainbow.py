@@ -6,7 +6,9 @@ import time
 
 import unicornhathd
 
-# credit: https://github.com/pimoroni/unicorn-hat-hd/tree/master/examples
+# See: https://github.com/pimoroni/unicorn-hat-hd/tree/master/examples
+# Which was used as Base and changed to fit my needs
+
 def main(run,running):
     running(True)
     step = 0

@@ -1,4 +1,5 @@
 
+# From: http://it-in-der-hosentasche.blogspot.com/2014/03/bluetooth-zwischen-raspberry-pi-und.html
 # file: rfcomm-server.py
 # auth: Albert Huang <albert@csail.mit.edu>
 # desc: simple demonstration of a server application that uses RFCOMM sockets

@@ -3,7 +3,7 @@ import time
 
 import icon_show
 import subprocess
-import ble2
+import bluetooth_to_android
 import lightHandler
 import unicornhathd as unicorn
 
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     except:
         print("except 2")
 
-    test = lightHandler.lightHandler()
+    lamp_handler = lightHandler.lightHandler()
 
 
-    ble2.main(test.callback)
+    bluetooth_to_android.main(lamp_handler.callback)

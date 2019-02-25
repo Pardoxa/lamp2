@@ -1,3 +1,5 @@
+# Source: https://github.com/pimoroni/unicorn-hat/blob/master/examples/hat/graphics.py
+# needed for dependency
 '''
 This file is used in UnicornHat examples
 for drawing things.

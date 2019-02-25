@@ -1,11 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+# See:  https://raw.githubusercontent.com/pimoroni/unicorn-hat/master/examples/cross.py
+# or https://github.com/pimoroni/unicorn-hat/blob/master/examples/cross.py
+# Which was used as base and then changed to fit my needs
 
 import time
 from random import randint
 
 import unicornhathd as unicorn
 
-# credit: https://raw.githubusercontent.com/pimoroni/unicorn-hat/master/examples/cross.py
 
 width,height=unicorn.get_shape()
 

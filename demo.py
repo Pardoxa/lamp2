@@ -1,21 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
+# See https://github.com/pimoroni/unicorn-hat-hd/blob/master/examples/demo.py
+# It was used as base and changed to my needs
 import colorsys
 import math
 import time
-
 import unicornhathd
 
 
-print("""Unicorn HAT HD: demo.py
-This pixel shading demo transitions between 4 classic graphics demo effects.
-Press Ctrl+C to exit!
-""")
-
-#unicornhathd.rotation(0)
 u_width, u_height = unicornhathd.get_shape()
-#unicornhathd.brightness(1.0)
-# Generate a lookup table for 8bit hue to RGB conversion
 hue_to_rgb = []
 
 for i in range(0, 255):
@@ -149,6 +142,7 @@ def run_rainbow_search(run, running):
 def run_tunnel(run, running):
     run_specific(run, running, tunnel)
 
+# to start specific lamp patterns from lightHandler 
 def run_specific(run, running, func):
     step = 0
     try:
@@ -178,7 +172,7 @@ def run_specific(run, running, func):
     except KeyboardInterrupt:
         unicornhathd.off()
 
-
+# start demo from lightHandler
 def main(run, running):
     step = 0
     try:

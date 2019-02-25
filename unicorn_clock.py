@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import signal
 import threading
 import time
 
-# https://github.com/pimoroni/unicorn-hat/blob/master/examples/hat/clock.py
-
+# See https://github.com/pimoroni/unicorn-hat/blob/master/examples/hat/clock.py
+# Which was used as base and changed to fit my needs
 from graphics import Drawing, Color
 import unicornhathd as unicorn
 

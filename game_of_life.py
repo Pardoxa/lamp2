@@ -1,6 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-# credit: https://raw.githubusercontent.com/pimoroni/unicorn-hat-hd/master/examples/game-of-life.py
+# See: https://github.com/pimoroni/unicorn-hat-hd/blob/master/examples/game-of-life.py
+# it was used as base and changed to fit my needs
+
 import random
 import time
 from random import randint

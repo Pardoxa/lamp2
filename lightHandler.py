@@ -4,7 +4,7 @@ import time
 import _thread
 import shlex
 import argparse
-import light_color
+import light_functions
 import demo
 import subprocess
 import candle
@@ -15,6 +15,7 @@ import drop
 import rainbow_dot
 import cross
 import unicorn_clock
+# created by Yannick Feld February 2019
 
 parser = argparse.ArgumentParser(description= "Parsing bluetooth command strings")
 parser.add_argument('--command', type=int)
@@ -94,11 +95,11 @@ class lightHandler():
                 print("inside 10 - color")
                 list = args.color.split(",")
                 print(list)
-                _thread.start_new_thread(light_color.setColor, (list[0], list[1], list[2], self.timer_over, self.setRunning), )
+                _thread.start_new_thread(light_functions.Color, (list[0], list[1], list[2], self.timer_over, self.setRunning), )
             elif args.command == 20:
                 _thread.start_new_thread(icon_show.icon_show, (self.timer_over, self.setRunning), )
             elif args.command == 30:
-                _thread.start_new_thread(light_color.setPicture, (args.picture, self.timer_over, self.setRunning), )
+                _thread.start_new_thread(light_functions.setPicture, (args.picture, self.timer_over, self.setRunning), )
             elif args.command == 40:
                 _thread.start_new_thread(demo.main, (self.timer_over, self.setRunning), )
             elif args.command == 41:
@@ -115,7 +116,7 @@ class lightHandler():
                 list = args.color.split(",")
                 print(list)
                 unicorn.rotation(rot_arr[(args.rot + 1) % 4])
-                _thread.start_new_thread(light_color.eye, (self.timer_over, self.setRunning, list[0], list[1], list[2]), )
+                _thread.start_new_thread(light_functions.eye, (self.timer_over, self.setRunning, list[0], list[1], list[2]), )
             elif args.command == -1:
                 fill_unicorn(255,0,0);
                 time.sleep(0.4)
@@ -150,7 +151,7 @@ class lightHandler():
             elif args.command == 130:
                 _thread.start_new_thread(unicorn_clock.main, (self.timer_over, self.setRunning), )
             elif args.command == 140:
-                _thread.start_new_thread(light_color.hue_wave, (self.timer_over, self.setRunning), )
+                _thread.start_new_thread(light_functions.hsv_wave, (self.timer_over, self.setRunning), )
 
             # _thread.start_new_thread(dev.run, (), )
         except:

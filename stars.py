@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-# credit: https://github.com/pimoroni/unicorn-hat-hd/blob/master/examples/stars.py
+# See: https://github.com/pimoroni/unicorn-hat-hd/blob/master/examples/stars.py
+# Which was used as base and changed to fit my needs
+
 import random
 from random import randint
 import unicornhathd

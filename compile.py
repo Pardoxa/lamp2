@@ -3,10 +3,9 @@ from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
 ext_modules = [
-    Extension("lightshow", ["lightshow.py"]),
     Extension("demo",["demo.py"]),
-    Extension("ble2",["ble2.py"]),
-    Extension("light_color",["light_color.py"]),
+    Extension("bluetooth_to_android",["bluetooth_to_android.py"]),
+    Extension("light_functions",["light_functions.py"]),
     Extension("icon_show",["icon_show.py"]),
     Extension("candle",["candle.py"]),
     Extension("stars",["stars.py"]),
