@@ -9,6 +9,43 @@ I plan to make clear/detailed instructions on how to run this code on your own R
 # Requirements
 
 You should have a raspberry pi zero w with a (fresh) install of [Raspian stretch light](https://www.raspberrypi.org/downloads/raspbian/) (Version: November 2018).
+A UNICORN HAT HD
+
+# installation
+
+## Step 1)
+First, you should use raspi-config and change your password, default passwords are bad!
+Then use the network options of raspi-config to connect to your WiFi.
+reboot
+
+## Step 2)
+You can skip this step, if you want to work on the pi directly.
+
+I prefere to use ssh for accessing the pi and sshfs to edit files on the pi.
+
+If you want to change the hostname of the raspberry, use raspi-config to do so now.
+Then/else stay in/ use raspi-config navigate to Interface options and turn on ssh.
+
+reboot
+You can now use "ssh pi@hostname" to access the pi.
+
+To access the storage of your pi, use sshfs, see [this](https://www.raspberrypi.org/documentation/remote-access/ssh/sshfs.md) for more details
+(Note: you can exchange the ip for the hostname of the pi).
+
+
+## Step 3)
+clone this repository to ~/ (thereby creating ~/lamp2 on your pi)
+
+## Step 4) - this will take a while
+use ssh (or the terminal on the pi) to navigate to ~/lamp2
+
+execute "./install.sh" (or open install.sh and run the commands step by step).
+
+Wait. This will download and install dependencies. It takes quite a while.
+Plan at least 2 hours for this, probably more.
+If you think your pi froze - it most certainly didn't.
+You can open a second terminal to ssh to your pi. Then execute the command "htop" to watch your pi working.
+
 
 # helpful for installation:
  https://raspberrypi.stackexchange.com/questions/55530/pybluez-and-gattlib-error
@@ -19,7 +56,8 @@ Tutorial for bluetooth communication between Android and Raspberry:
 
 http://it-in-der-hosentasche.blogspot.com/2014/03/bluetooth-zwischen-raspberry-pi-und.html
 
-## Useful repositorys:
+## Useful repositorys
+I copied a lot of the light effects from here and changed the scripts to meet my requirements:
 https://github.com/pimoroni/unicorn-hat-hd/tree/master/examples
 https://github.com/pimoroni/unicorn-hat
 
