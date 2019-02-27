@@ -311,16 +311,33 @@ def eye(run, running, h, s, v):
     unicorn.off()
     running(False)
 
-def test_run():
-    return True
+class test_handler():
+    seconds = None
+    endTime = time.monotonic()
+    """ For testing the lightfunctions without bluetooth """
+    def __init__(self, seconds):
+        self.seconds = seconds
 
-def test_running(var):
-    pass
+
+    def test_run(self):
+        return time.monotonic() < self.endTime
+
+    def test_running(self, started):
+        if started:
+            self.endTime = time.monotonic() + self.seconds
 
 def main():
-    unicorn.brightness(1)
-    #setColor(255,0,255,test_run,test_running)
-    hsv_wave(test_run, test_running)
+    handler = test_handler(5)
+    try:
+        print("Press Ctrl+C to exit")
+        unicorn.brightness(0.5)
+        #setColor(255,0,255,test_run,test_running)
+        while True:
+            hsv_wave(handler.test_run, handler.test_running)
+            eye(handler.test_run, handler.test_running, 0.5, 0.9, 1)
+            Color(0.7, 0.9, 1, handler.test_run, handler.test_running)
+    except KeyboardInterrupt:
+        unicorn.off()
 
 if __name__ == '__main__':
     main()

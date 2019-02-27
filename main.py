@@ -26,5 +26,4 @@ if __name__ == '__main__':
 
     lamp_handler = lightHandler.lightHandler()
 
-
     bluetooth_to_android.main(lamp_handler.callback)
