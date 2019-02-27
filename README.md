@@ -74,7 +74,7 @@ python3 light_functions.py
 
 If everything went well, the lamp will light up and switch between 3 light patterns.
 
-# Step 6
+## Step 6
 
 Now we will fix the bluetooth.
 Basically, we will do [this](https://raspberrypi.stackexchange.com/questions/41776/failed-to-connect-to-sdp-server-on-ffffff000000-no-such-file-or-directory) fix.
@@ -118,7 +118,7 @@ Waiting for connection
 
 Then everything went well. You can exit the program with Ctrl+C
 
-# Step 7
+## Step 7
 You can skip this, but it will make everything look a lot smoother, so I do not recommend skipping this.
 
 We will now compile the python code to have more efficent running binarys.
@@ -133,7 +133,7 @@ NOTE: If you want to edit the python code later on, you first have to delete the
 Otherwise python will use the ".so" file for imports and not the ".py" file. So you might wonder why your editing is not doing anything.
 
 
-# Step 8
+## Step 8
 
 Now we will work on the autostart of the script.
 
@@ -149,6 +149,64 @@ at the bottom.
 
 Important: crontab has to end with new line! So at least one empty line on the bottom is very important!
 
+To test if everything worked: reboot your pi.
+
+After the pi bootet, the lamp should flash green.
+
+## Step 9
+Pair your android with your raspberry. You do not have to have the app installed yet.
+kill the autostart script by running `~/lamp2/kill-autostart.sh`
+Then start the editor using:
+
+```bash
+sudo nano /etc/bluetooth/main.conf
+```
+and add the line:
+
+```
+DisablePlugins = pnat
+
+```
+
+I do not know if this file has to end with a newline, but it will not hurt to do so.
+
+reboot the pi.
+
+Kill the autostart script again, then run `sudo hciconfig hci0 piscan`
+
+Now turn on bluetooth on your android and search for your pi. You should see the pi (the name is the hostname of the pi).
+Pair your phone with your android.
+
+then reboot the pi.
+
+Congratulations, you are done with the raspberry part. All that is left is installing the [app](https://github.com/Pardoxa/Lampe2) on your android.
+
+Have fun :)
+
+# Cancel Program started by autostart
+
+If you want to cancel the script started by autostart, use:
+```Bash
+~/lamp2/kill-autostart.sh
+```
+
+Note: This will not turn off the UNICORN HAT HD. The Picture will just freeze.
+If you want to turn off the light, just use the android app with the cancel command.
+If for whatever reason you cannot and have killed the autostart script,
+you can do it like this:
+
+```bash
+python3
+```
+```python
+import unicornhathd as unicorn
+unicorn.off()
+```
+
+If you want to manually start the scrip again, run:
+```bash
+~/lamp2/lamp_autostart.sh
+```
 
 # used as base:
 Tutorial for bluetooth communication between Android and Raspberry:
