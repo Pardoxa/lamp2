@@ -12,12 +12,12 @@ A [UNICORN HAT HD](https://shop.pimoroni.com/products/unicorn-hat-hd)
 
 # installation
 
-## Step 1)
+## Step 1
 First, you should use `sudo raspi-config` and change your password, default passwords are bad!
 Then use the network options of `raspi-config` to connect to your WiFi.
 reboot
 
-## Step 2)
+## Step 2
 You can skip this step, if you want to work on the pi directly.
 
 I prefere to use `ssh` for accessing the pi and `sshfs` to edit files on the pi.
@@ -33,7 +33,7 @@ To access the storage of your pi, use `sshfs`, see [this](https://www.raspberryp
 
 Note: If you want to see what your pi is doing, you can always open a (second) terminal to ssh to your pi (again). Then execute the command `htop` to watch your pi working.
 
-## Step 3)
+## Step 3
 
 clone this repository:
 
@@ -43,17 +43,21 @@ cd
 git clone https://github.com/Pardoxa/lamp2.git
 ```
 
-It is important to clone the Repository to this specific location, since I hardcoded a few Pathes.
+It is important to clone the Repository to this specific location, since I hardcoded a few Paths.
 I'm sorry for that, but this is just a freetime project and I only decided to make this repository public after I finished.
 
-## Step 4)
+## Step 4
 
 execute `sudo raspi-config nonint do_spi 0`
 then reboot your pi
 
-use ssh (or the terminal on the pi) to navigate to ~/lamp2 (`cd ~/lamp2`)
+Now execute the commands:
 
-execute `./install.sh` (or open install.sh and run the commands step by step).
+```bash
+cd ~/lamp2
+./install.sh
+```
+(or open install.sh and run the commands manually).
 
 Wait. This will download and install dependencies. It takes a while.
 
@@ -104,22 +108,23 @@ sudo -E python3 main.py
 
 If the output looks like:
 
+```
 b''
-
 except 2
-
 Waiting for connection
+```
 
 Or:
 
+```
 b''
-
 Waiting for connection
+```
 
 Then everything went well. You can exit the program with Ctrl+C
 
 ## Step 7
-You can skip this, but it will make everything look a lot smoother, so I do not recommend skipping this.
+You can skip this, but it will make everything look a lot smoother, so I do not recommend skipping this step.
 
 We will now compile the python code to have more efficent running binarys.
 To do that, just run the command:
@@ -138,7 +143,8 @@ Otherwise python will use the ".so" file for imports and not the ".py" file. So 
 Now we will work on the autostart of the script.
 
 Use the command `crontab -e` to edit, add the lines:
-```
+
+```vim
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin
 @reboot source ~/.bashrc && ~/lamp2/lamp_autostart.sh > /home/pi/reboot.out
