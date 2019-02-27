@@ -6,8 +6,9 @@ This is the raspberry part.
 
 # Requirements
 
-You should have a raspberry pi zero w with a (fresh) install of [Raspian stretch light](https://www.raspberrypi.org/downloads/raspbian/) (Version: November 2018).
-A UNICORN HAT HD
+You should have a raspberry pi zero w with header and a (fresh) install of [Raspian stretch light](https://www.raspberrypi.org/downloads/raspbian/) (Version: November 2018).
+
+A [UNICORN HAT HD](https://shop.pimoroni.com/products/unicorn-hat-hd)
 
 # installation
 
@@ -99,6 +100,10 @@ We will now compile the python code to have more efficent running binarys.
 To do that, just run the command "python3 compile.py build_ext --inplace".
 It will take about 10 minutes or so.
 
+NOTE: If you want to edit the python code later on, you first have to delete the matching "\*.so" file.
+Otherwise python will use the ".so" file for imports and not the ".py" file. So you might wonder why your editing is not doing anything.
+
+
 # Step 8
 
 Now we will work on the autostart of the script.
@@ -107,7 +112,9 @@ Use the command "crontab -e" to edit.
 Add the lines:
 
 SHELL=/bin/bash
+
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin
+
 @reboot source ~/.bashrc && ~/lamp2/lamp_autostart.sh > /home/pi/reboot.out
 
 at the bottom.
@@ -124,29 +131,6 @@ http://it-in-der-hosentasche.blogspot.com/2014/03/bluetooth-zwischen-raspberry-p
 I copied a lot of the light effects from here and changed the scripts to meet my requirements:
 https://github.com/pimoroni/unicorn-hat-hd/tree/master/examples
 https://github.com/pimoroni/unicorn-hat
-
-# Fix
-https://raspberrypi.stackexchange.com/questions/41776/failed-to-connect-to-sdp-server-on-ffffff000000-no-such-file-or-directory
-
-# crontab:
-
-to edit use: "crontab -e"
-and add :
-
-SHELL=/bin/bash
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games
-
-
-@reboot source ~/.bashrc && bash /home/pi/lamp2/lamp_autostart.sh > /home/pi/reboot.out
-
-
-At the end of the crontab. Note: crontab has to end with new line!
-
-Not everything in the Crontab is needed - filter not needed parts when I build the next lamp
-
-
-# compile
-python3 compile.py build_ext --inplace
 
 # For the icons:
 https://creativecommons.org/licenses/by/3.0/
