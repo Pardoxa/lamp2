@@ -15,7 +15,11 @@ A [UNICORN HAT HD](https://shop.pimoroni.com/products/unicorn-hat-hd)
 ## Step 1
 First, you should use `sudo raspi-config` and change your password, default passwords are bad!
 Then use the network options of `raspi-config` to connect to your WiFi.
-reboot
+
+reboot the pi:
+```bash
+sudo reboot
+```
 
 ## Step 2
 You can skip this step, if you want to work on the pi directly.
@@ -57,11 +61,15 @@ Now execute the commands:
 cd ~/lamp2
 ./install.sh
 ```
-(or open install.sh and run the commands manually).
+(or look at install.sh and run the commands manually).
 
 Wait. This will download and install dependencies. It takes a while.
 
 after everything installed: shutdown the pi
+
+```bash
+sudo shutdown -h now
+```
 
 ## Step 5
 
@@ -96,6 +104,20 @@ and change it to
 `ExecStart=/usr/lib/bluetooth/bluetoothd --compat`
 
 Press Ctrl+o followed by enter to save the changes. Exit the editor with Ctrl+X
+
+Then open the editor again, this time using:
+
+```bash
+sudo nano /etc/bluetooth/main.conf
+```
+and add the line:
+
+```
+DisablePlugins = pnat
+
+```
+
+I do not know if this file has to end with a newline, but it will not hurt if it does.
 
 reboot
 
@@ -161,24 +183,11 @@ After the pi bootet, the lamp should flash green.
 
 ## Step 9
 Pair your android with your raspberry. You do not have to have the app installed yet.
+To pair do the following:
+
 kill the autostart script by running `~/lamp2/kill-autostart.sh`
-Then start the editor using:
 
-```bash
-sudo nano /etc/bluetooth/main.conf
-```
-and add the line:
-
-```
-DisablePlugins = pnat
-
-```
-
-I do not know if this file has to end with a newline, but it will not hurt to do so.
-
-reboot the pi.
-
-Kill the autostart script again, then run `sudo hciconfig hci0 piscan`
+then run `sudo hciconfig hci0 piscan`
 
 Now turn on bluetooth on your android and search for your pi. You should see the pi (the name is the hostname of the pi).
 Pair your phone with your android.

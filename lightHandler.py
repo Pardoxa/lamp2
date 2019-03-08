@@ -1,3 +1,4 @@
+from __future__ import print_function
 import unicornhathd as unicorn
 import icon_show
 import time
@@ -80,17 +81,18 @@ class lightHandler():
         print("handleCommand")
         try:
 
-            print("set timer")
             print(args.command)
-            self.set_timer(args.dur)
-            unicorn.brightness(args.bright)
             self.status = 10
             while self.running:
                 print("waiting")
                 time.sleep(0.1)
             self.status = 0
             unicorn.rotation(rot_arr[args.rot])
-            print("if following")
+            unicorn.brightness(args.bright)
+            print("set timer")
+            self.set_timer(args.dur)
+            print("Execute command",end = "\t")
+            print(args.command)
             if args.command == 0:
                 print("inside 10 - color")
                 list = args.color.split(",")
