@@ -25,6 +25,7 @@ parser.add_argument('--color', type=str)
 parser.add_argument('--bright', type=float)
 parser.add_argument('--dur', type=int)
 parser.add_argument('--rot', type=int)
+parser.add_argument('--freq', type=int)
 rot_arr = [0,90,180,270]
 args = None
 unicorn.rotation(0)
@@ -102,6 +103,8 @@ class lightHandler():
                 _thread.start_new_thread(icon_show.icon_show, (self.timer_over, self.setRunning), )
             elif args.command == 30:
                 _thread.start_new_thread(light_functions.setPicture, (args.picture, self.timer_over, self.setRunning), )
+            elif args.command == 31:
+                _thread.start_new_thread(light_functions.setPictureShow, (args.picture, self.timer_over, self.setRunning, args.freq), )
             elif args.command == 40:
                 _thread.start_new_thread(demo.main, (self.timer_over, self.setRunning), )
             elif args.command == 41:

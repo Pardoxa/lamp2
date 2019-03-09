@@ -8,6 +8,7 @@ from random import uniform
 import subprocess
 import math
 import colorsys
+from itertools import cycle
 
 # Created by Yannick Feld February 2019
 
@@ -160,10 +161,9 @@ def setPicture(pic, run, running):
     y = 0
     for val in list:
         pixel = val.split(",")
-        #print(int(pixel[0]), end = "\t")
-    #    print(x, end = "\t")
-    #    print(y)
-        unicorn.set_pixel(x,y, int(pixel[0]), int(pixel[1]), int(pixel[2]))
+
+        unicorn.set_pixel_hsv(x,y, float(pixel[0]), float(pixel[1]), float(pixel[2]))
+    #    unicorn.set_pixel(x,y, int(pixel[0]), int(pixel[1]), int(pixel[2]))
         x += 1
         if x == 16:
             x = 0
@@ -172,6 +172,49 @@ def setPicture(pic, run, running):
     while run():
         time.sleep(0.01)
     unicorn.off()
+    running(False)
+
+# https://stackoverflow.com/questions/29643352/converting-hex-to-rgb-value-in-python
+def fromHex(hex):
+    hex.lstrip('#')
+    return tuple(int(hex[i:i+2], 16) for i in (0, 2 ,4))
+
+def setPictureShow(pic, run, running, frequency):
+    running(True)
+    pictureList = pic.split("|")
+
+    list_cycle = cycle(pictureList)
+    continue_loop = run()
+    while continue_loop:
+        x = 0
+        y = 0
+        current_list = next(list_cycle)
+
+        if(current_list == None or len(current_list) < 256):
+            continue_loop = run()
+            continue
+        list = current_list.split(",")
+
+        for val in list:
+            pixel = fromHex(val)
+            #print(pixel)
+
+            # unicorn.set_pixel_hsv(x,y, float(pixel[0]), float(pixel[1]), float(pixel[2]))
+            unicorn.set_pixel(x,y, pixel[0], pixel[1], pixel[2])
+            x += 1
+            if x == 16:
+                x = 0
+                y += 1
+        unicorn.show()
+        now = time.monotonic()
+        while time.monotonic() < now + frequency:
+            continue_loop = run()
+            if not continue_loop:
+                break;
+            else:
+                time.sleep(0.05)
+    unicorn.off()
+
     running(False)
 
 circle = np.array([
