@@ -9,6 +9,7 @@ import subprocess
 import math
 import colorsys
 from itertools import cycle
+import re
 
 # Created by Yannick Feld February 2019
 
@@ -156,14 +157,14 @@ def Color(h, s, v, run, running):
 
 def setPicture(pic, run, running):
     running(True)
-    list = pic.split("#")
+    pic = decompress(pic)
+    list = re.findall('......', pic)
     x = 0
     y = 0
     for val in list:
-        pixel = val.split(",")
+        pixel = fromHex(val)
+        unicorn.set_pixel(x, y, pixel[0], pixel[1], pixel[2])
 
-        unicorn.set_pixel_hsv(x,y, float(pixel[0]), float(pixel[1]), float(pixel[2]))
-    #    unicorn.set_pixel(x,y, int(pixel[0]), int(pixel[1]), int(pixel[2]))
         x += 1
         if x == 16:
             x = 0
@@ -179,6 +180,18 @@ def fromHex(hex):
     hex.lstrip('#')
     return tuple(int(hex[i:i+2], 16) for i in (0, 2 ,4))
 
+def decompress(compressed):
+    temp = compressed.split("x")
+    temp = [x for x in temp if x]
+    depressed = str("")
+    for i in range(len(temp)):
+        if len(temp[i]) >= 6:
+            depressed += str(temp[i])
+        else:
+            depressed += depressed[-6:] * int(temp[i])
+
+    return depressed
+
 def setPictureShow(pic, run, running, frequency):
     running(True)
     pictureList = pic.split("|")
@@ -189,17 +202,14 @@ def setPictureShow(pic, run, running, frequency):
         x = 0
         y = 0
         current_list = next(list_cycle)
-
-        if(current_list == None or len(current_list) < 256):
+        current_list = decompress(current_list)
+        if(current_list == None or len(current_list) != 256 * 6):
             continue_loop = run()
             continue
-        list = current_list.split(",")
 
+        list = re.findall('......', current_list)
         for val in list:
             pixel = fromHex(val)
-            #print(pixel)
-
-            # unicorn.set_pixel_hsv(x,y, float(pixel[0]), float(pixel[1]), float(pixel[2]))
             unicorn.set_pixel(x,y, pixel[0], pixel[1], pixel[2])
             x += 1
             if x == 16:
