@@ -26,6 +26,7 @@ parser.add_argument('--bright', type=float)
 parser.add_argument('--dur', type=int)
 parser.add_argument('--rot', type=int)
 parser.add_argument('--freq', type=int)
+parser.add_argument('--flavor', type=int, action='append')
 rot_arr = [0,90,180,270]
 args = None
 unicorn.rotation(0)
@@ -156,7 +157,7 @@ class lightHandler():
             elif args.command == 130:
                 _thread.start_new_thread(unicorn_clock.main, (self.timer_over, self.setRunning), )
             elif args.command == 140:
-                _thread.start_new_thread(light_functions.hsv_wave, (self.timer_over, self.setRunning), )
+                _thread.start_new_thread(light_functions.hsv_wave, (self.timer_over, self.setRunning, args.flavor), )
 
             # _thread.start_new_thread(dev.run, (), )
         except:
@@ -167,9 +168,11 @@ class lightHandler():
             command = self.command[6:-6]
             print(command)
             args = parser.parse_args(shlex.split(command))
+            if args.flavor == None:
+                args.flavor = [0,0,1,10]
             #print("Command", end= "\t")
             print(args.command)
-            print(args.picture)
+            #print(args.picture)
             return args
         except:
             print("Handle Command error")

@@ -27,22 +27,60 @@ u_width, u_height = unicorn.get_shape()
 dists = np.zeros((16,16))
 v_map = np.zeros((16,16))
 
+inversePi = 1.0 / math.pi
+
+def _flavor_function_map(value):
+    if value == 0:
+        return _sinMap
+    elif value == 1:
+        return _sqrtSinMap
+    else:
+        return _triangle
+
+def _triangle(value):
+    value = math.fmod(value, 2 * math.pi)
+    if value < math.pi:
+        return value * inversePi
+    else:
+        return 2 - value * inversePi
+
+def _sinMap(value):
+    return (math.sin(value) + 1) * 0.5
+
+def _sqrtSinMap(value):
+    return math.sqrt((math.sin(value) + 1) * 0.5)
 # creates map of distances from x0 and y0 for pixels, creates v_map (v from hsv) based on distance
-def make_mapping(v, x0, y0, with_hue = True):
+def make_mapping(v, x0, y0, with_hue = True, flavor = 0):
     global dists
     global v_map
+    if flavor == 0 or flavor == 2:
+        for x in range(16):
+            x_temp = (x - x0) * (x - x0)
+            for y in range(16):
+                dists[x][y] = x_temp + (y - y0) * (y - y0)
+        np.sqrt(dists, out = dists)
+    elif flavor > 0:
+        # https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.norm.html
+        for x in range(16):
+            x_temp = abs(x - x0) ** flavor
+            for y in range(16):
+                dists[x][y] = x_temp + abs(y - y0) ** flavor
+        np.power(dists, 1.0 / flavor, out = dists)
+    else:
+        list = [0,0]
+        for x in range(16):
+            list[0] = x - x0
+            for y in range(16):
+                list[1] = y - y0
+                dists[x][y] = np.linalg.norm(list, ord = flavor)
 
-    for x in range(16):
-        for y in range(16):
-            dists[x][y] = (x - x0) * (x - x0) + (y - y0) * (y - y0)
-    np.sqrt(dists, out = dists)
     if with_hue:
         maximum = np.amax(dists)
         v_times_inverseMaximum = v / maximum
         v_map = (maximum - dists) * v_times_inverseMaximum
 
 
-def hsv_wave(run, running):
+def hsv_wave(run, running, flavor):
     global dists
     running(True)
 
@@ -81,19 +119,23 @@ def hsv_wave(run, running):
         y0 += direction[1]
 
         # create dists and v_map
-        make_mapping(v, x0, y0)
+        make_mapping(v, x0, y0, flavor = flavor[0])
         maximum = np.amax(dists)
         dists *= math.pi / maximum
 
         # set colors
+        x_func = _flavor_function_map(flavor[1])
+        y_func = _flavor_function_map(flavor[2])
         for x in range(u_width):
             for y, v_from_v_map, mapped_distance in zip(range(u_height), v_map[x], dists[x]):
-                h = (math.sin(step1 + mapped_distance) + 1) * 0.5
-                s = math.sqrt((math.sin(step2 + mapped_distance) + 1) * 0.5)
+                h = x_func(step1 + mapped_distance)
+                #h = _triangle(step1 + mapped_distance)
+                s = y_func(step2 + mapped_distance)
+                #s = math.sqrt((math.sin(step2 + mapped_distance) + 1) * 0.5)
                 unicorn.set_pixel_hsv(x, y, h, s, v_from_v_map)
 
-        step1 += math.pi * 0.01
-        step2 += math.e * 0.01
+        step1 += math.pi * 0.001 * flavor[3]
+        step2 += math.e * 0.001 * flavor[3]
         unicorn.show()
 
     unicorn.off()
@@ -380,15 +422,23 @@ class test_handler():
             self.endTime = time.monotonic() + self.seconds
 
 def main():
-    handler = test_handler(5)
+    handler = test_handler(10)
     try:
         print("Press Ctrl+C to exit")
         unicorn.brightness(0.5)
         #setColor(255,0,255,test_run,test_running)
+        flavor = -2
+        #eye(handler.test_run, handler.test_running, 0.5, 0.9, 1)
+        #Color(0.7, 0.9, 1, handler.test_run, handler.test_running)
         while True:
-            hsv_wave(handler.test_run, handler.test_running)
-            eye(handler.test_run, handler.test_running, 0.5, 0.9, 1)
-            Color(0.7, 0.9, 1, handler.test_run, handler.test_running)
+            for x in range(3):
+                for y in range(3):
+                    flavor_list = [flavor, x, y, 10]
+                    print("FlavorList: ",end="\t")
+                    print(flavor_list)
+                    hsv_wave(handler.test_run, handler.test_running, flavor_list)
+            flavor += 1
+
     except KeyboardInterrupt:
         unicorn.off()
 
