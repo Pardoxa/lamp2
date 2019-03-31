@@ -42,6 +42,7 @@ Note: If you want to see what your pi is doing, you can always open a (second) t
 clone this repository:
 
 ```Bash
+sudo apt-get update
 sudo apt-get install git
 cd
 git clone https://github.com/Pardoxa/lamp2.git
@@ -173,9 +174,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin
 ```
 
 You can change ` > /home/pi/reboot.out` to ` 2>&1> /dev/null` if you do not want logfiles from the autostart.
-at the bottom.
 
-Important: crontab has to end with new line! So at least one empty line on the bottom is very important!
+IMPORTANT: crontab has to end with new line! So at least one empty line on the bottom is very important!
 
 To test if everything worked: reboot your pi.
 

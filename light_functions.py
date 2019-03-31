@@ -10,6 +10,8 @@ import math
 import colorsys
 from itertools import cycle
 import re
+from scipy.special import expit as ex
+import scipy.special as special
 
 # Created by Yannick Feld February 2019
 
@@ -28,32 +30,124 @@ dists = np.zeros((16,16))
 v_map = np.zeros((16,16))
 
 inversePi = 1.0 / math.pi
+inversePi2 = 1.0 / (math.pi * 2)
 
-def _flavor_function_map(value):
-    if value == 0:
-        return _sinMap
-    elif value == 1:
-        return _sqrtSinMap
-    else:
-        return _triangle
+class flavor_funcs():
 
-def _triangle(value):
-    value = math.fmod(value, 2 * math.pi)
-    if value < math.pi:
-        return value * inversePi
-    else:
-        return 2 - value * inversePi
+    def _init_values_sigmoid(self):
+        self.value_map = [ex(i * 0.01) for i in range(-5000,5000,1)]
+        self.value_map.extend(self.value_map[::-1])
 
-def _sinMap(value):
-    return (math.sin(value) + 1) * 0.5
+    def _init_values_sin(self):
+        self.value_map = np.array([1 + math.sin(i * 0.0001 * math.pi) for i in range(20000)])
+        for i in range(20000):
+            self.value_map[i] *= 0.5
 
-def _sqrtSinMap(value):
-    return math.sqrt((math.sin(value) + 1) * 0.5)
+    def _init_values_sqrt_sin(self):
+        self._init_values_sin()
+        np.sqrt(self.value_map, out = self.value_map)
+
+    def _init_values_struve(self):
+        temp_values = np.arange(0, 20, 0.002)
+        self.value_map = special.struve(1, temp_values)
+        c_max = np.amax(self.value_map)
+        np.multiply(self.value_map, 1.0 / c_max, out = self.value_map)
+        self.value_map = np.concatenate((self.value_map, self.value_map[::-1]))
+
+    def _init_values_modstruve(self):
+        temp_values = np.arange(0, 10, 0.001)
+        self.value_map = special.modstruve(2, temp_values)
+        c_max = np.amax(self.value_map)
+        np.multiply(self.value_map, 1.0 / c_max, out = self.value_map)
+        self.value_map = np.concatenate((self.value_map, self.value_map[::-1]))
+
+    def _init_values_itstruve0(self):
+        self.value_map = np.array([special.itstruve0(i * 0.002) for i in range(-10000, 10000)])
+        arr_max = np.amax(self.value_map)
+        np.multiply(self.value_map, 1.0 / arr_max, out = self.value_map)
+
+    def _init_values_it2struve0(self):
+        self.value_map = np.array([special.it2struve0(i * 0.002) for i in range(-10000, 10000)])
+        arr_max = np.amax(self.value_map)
+        np.multiply(self.value_map, 1.0 / arr_max, out = self.value_map)
+
+    def _init_values_extra(self, func):
+        arr = np.array([special.itmodstruve0(i * 0.0004) for i in range(-10000, 10000)])
+        arr2 = np.array([func(i * 0.0004) for i in range(-10000, 10000)])
+        sig = np.array([1 if i < 0 else -1 for i in range(-10000, 10000)])
+        arr_max = np.amax(arr)
+        np.multiply(arr, 1.0 / arr_max, out = arr)
+        arr_max = np.amax(arr2)
+        np.multiply(arr2, 1.0 / arr_max, out = arr2)
+        arr3 =  arr * sig - arr2
+        arr_min = np.amin(arr3)
+        self.value_map = arr3 - arr_min
+        arr_max = np.amax(self.value_map)
+        np.multiply(self.value_map, 1.0 / arr_max, out = self.value_map)
+
+    def _init_values_extra0(self):
+        self._init_values_extra(special.itstruve0)
+
+    def _init_values_extra2(self):
+        self._init_values_extra(special.it2struve0)
+
+    def __init__(self, flavor):
+        self.flavor = flavor
+        if flavor == 4:
+            self._init_values_sigmoid()
+        elif flavor == 0:
+            self._init_values_sin()
+        elif flavor == 1:
+            self._init_values_sqrt_sin()
+        elif flavor == 5:
+            self._init_values_struve()
+        elif flavor == 6:
+            self._init_values_modstruve()
+        elif flavor == 7:
+            self._init_values_itstruve0()
+        elif flavor == 8:
+            self._init_values_it2struve0()
+        elif flavor == 9:
+            self._init_values_extra0()
+        elif flavor == 10:
+            self._init_values_extra2()
+
+    def _triangle(self, value):
+        value = math.fmod(value, 2 * math.pi)
+        if value < math.pi:
+            return value * inversePi
+        else:
+            return 2 - value * inversePi
+
+    def _line(self, value):
+        value = math.fmod(value, 2 * math.pi)
+        return value * inversePi2
+
+    def _value(self, index):
+        index = index * inversePi2 * 20000
+        index = int(index) % 20000
+        return self.value_map[index]
+
+
+    def flavor_function_map(self):
+        if self.flavor == 2:
+            return self._triangle
+        elif self.flavor == 3:
+            return self._line
+        else:
+            return self._value
+
+
 # creates map of distances from x0 and y0 for pixels, creates v_map (v from hsv) based on distance
 def make_mapping(v, x0, y0, with_hue = True, flavor = 0):
     global dists
     global v_map
-    if flavor == 0 or flavor == 2:
+    if flavor == 0:
+        for x in range(16):
+            x_temp = (x - x0)
+            for y in range(16):
+                dists[x][y] = x_temp + (y - y0)
+    elif flavor == 2:
         for x in range(16):
             x_temp = (x - x0) * (x - x0)
             for y in range(16):
@@ -95,6 +189,12 @@ def hsv_wave(run, running, flavor):
     x_goal = uniform(0,15)
     step1 = uniform(0, math.pi * 2)
     step2 = uniform(0, math.pi * 2)
+    x_func_mapping_class = flavor_funcs(flavor[1])
+    y_func_mapping_class = flavor_funcs(flavor[2])
+    x_func = x_func_mapping_class.flavor_function_map()
+    y_func = y_func_mapping_class.flavor_function_map()
+    #x_func = _flavor_function_map(flavor[1])
+    #y_func = _flavor_function_map(flavor[2])
     while run() and v != 0:
         if x0 == x_goal and y0 == y_goal:
             print("hsv_wave - arrived",end="\tx:\t")
@@ -124,8 +224,7 @@ def hsv_wave(run, running, flavor):
         dists *= math.pi / maximum
 
         # set colors
-        x_func = _flavor_function_map(flavor[1])
-        y_func = _flavor_function_map(flavor[2])
+
         for x in range(u_width):
             for y, v_from_v_map, mapped_distance in zip(range(u_height), v_map[x], dists[x]):
                 h = x_func(step1 + mapped_distance)
@@ -430,9 +529,10 @@ def main():
         flavor = -2
         #eye(handler.test_run, handler.test_running, 0.5, 0.9, 1)
         #Color(0.7, 0.9, 1, handler.test_run, handler.test_running)
+        hsv_wave(handler.test_run, handler.test_running, [0,5,1,10])
         while True:
-            for x in range(3):
-                for y in range(3):
+            for x in range(5):
+                for y in range(5):
                     flavor_list = [flavor, x, y, 10]
                     print("FlavorList: ",end="\t")
                     print(flavor_list)

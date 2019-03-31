@@ -10,5 +10,5 @@ pip3 install pybluez
 sudo apt-get install libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev -y
 sudo apt-get install python3-pil -y
 sudo apt-get install cython3 -y
-sudo apt-get install
+sudo apt-get install python3-scipy -y
 sudo apt install bluetooth libbluetooth-dev pkg-config libboost-python-dev libboost-thread-dev libglib2.0-dev python-dev -y
