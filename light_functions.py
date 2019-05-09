@@ -395,7 +395,7 @@ def eye_helper(center_x, center_y, h, s, v, calc_dist = True):
     global rgb_picture
     if calc_dist:
         # calculate distances
-        make_mapping(1, center_x, center_y, False)
+        make_mapping(1, center_x, center_y, False, flavor = 2)
 
         # map inverse distance to brightness
         maximum = np.amax(dists)
